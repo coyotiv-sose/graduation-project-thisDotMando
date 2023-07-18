@@ -1,4 +1,4 @@
-@startuml Person 
+@startuml Person
 class Person {
   name: string
   age: number
