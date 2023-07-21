@@ -1,22 +1,16 @@
 module.exports = class Channel {
   subscribers = []
-  uploads = 0
-  constructor(name, channelName) {
+  videos = []
+  constructor(name, owner) {
     this.name = name
-    this.channelName = channelName
+    this.owner = owner
   }
-  subscribe = name => {
-    //Users can subscribe to other channels
-    return this.subscribers.push(name)
+  uploadVideo(video) {
+    //channel can create an Array with uploaded videos
+    this.videos.push(video)
   }
-  videoUploads = videos => {
-    //channel can create a counter with uploaded videos !!!!! *****Later I will add a list with uploaded videos
-    this.uploads++
-    return this.uploadlist
-  }
-  deleteUploads = () => {
+  deleteVideo(video) {
     //channel can delete a counter with uploaded videos
-    this.uploads--
-    return this.uploadlist
+    this.videos.splice(this.videos.indexOf(video), 1)
   }
 }

@@ -1,10 +1,17 @@
 @startuml
 
-title My graduation Project - a Youtube clone website
 
-usecase "User can create an account and login to the website" as UC1
-usecase "User can create an own channel and subscribe to other channels" as UC2
-usecase "User can upload a video and it will be streamed to the website" as UC3
-usecase "User can comment and like a video" as UC4
-usecase "User can search for a video" as UC5
+title My graduation Project - a Youtube clone website
+usecase "User"
+usecase " can create an account and login to the website" as UC1
+usecase " can create an own channel and subscribe to other channels" as UC2
+usecase " can upload a video and it will be streamed to the website" as UC3
+usecase " can comment and like a video" as UC4
+usecase " can search for a video" as UC5
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
 @enduml

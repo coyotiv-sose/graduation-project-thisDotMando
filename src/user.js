@@ -1,16 +1,26 @@
+const Video = require('./video')
+const Channel = require('./channel')
 module.exports = class User {
-  constructor(name, email, age, newUser) {
+  channels = []
+  subscribedOtherUsers = 0
+  constructor(name, email, age) {
     this.name = name
     this.email = email
     this.age = age
-    this.newUser = newUser
   }
-  checkNewUser = () => {
-    if (this.newUser === true) {
-      console.log('A new User on MeTube: ' + this.name)
-      return (this.newUser = false)
-    } else {
-      console.log('Welcome back ' + this.name)
-    }
+  createChannel(channelName) {
+    //User can create an own channel
+    const channel = new Channel(channelName, this)
+    return this.channels.push(channel)
+  }
+  subscribe(channel) {
+    //Users can subscribe to other channels
+    channel.subscribers.push(this)
+    return this.subscribedOtherUsers++
+  }
+  createVideo(title, description) {
+    //User can upload a video
+    const video = new Video(title, description, this)
+    return video
   }
 }
