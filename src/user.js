@@ -2,7 +2,7 @@ const Video = require('./video')
 const Channel = require('./channel')
 module.exports = class User {
   channels = []
-  subscribedOtherUsers = 0
+  subscribedOtherUsers = []
   constructor(name, email, age) {
     this.name = name
     this.email = email
@@ -15,8 +15,8 @@ module.exports = class User {
   }
   subscribe(channel) {
     //Users can subscribe to other channels
-    channel.subscribers.push(this.name) // add only the userName to the channel's subscribers list(Array
-    return this.subscribedOtherUsers++
+    channel.subscribers.push(this.name) // add only the userName to the channel's subscribers list(Array)
+    return this.subscribedOtherUsers.push(channel) // add the channelName to the user's subscribedOtherUsers list(Array)
   }
   createVideo(title, description) {
     //User can upload a video
