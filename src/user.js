@@ -15,7 +15,7 @@ module.exports = class User {
   }
   subscribe(channel) {
     //Users can subscribe to other channels
-    channel.subscribers.push(this)
+    channel.subscribers.push(this.name) // add only the userName to the channel's subscribers list(Array
     return this.subscribedOtherUsers++
   }
   createVideo(title, description) {
