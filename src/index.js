@@ -16,10 +16,16 @@ function createNewUser(name, email, age) {
   return new User(name, email, age)
 }
 
+function createNewChannel(name, owner) {
+  return new Channel(name, owner)
+}
+
+//creating new  User instances
 const user0 = createNewUser('Mitch', 'mitch@web.de', 36) // Instances user with name, email, age, newUser(boolean)
 const user1 = createNewUser('John', 'john@web.de', 17)
 const user2 = createNewUser('Peter', 'pete@web.de', 19)
 
+//Test if the instances are created
 console.log(user0)
 console.log(user1)
 console.log(user2)
@@ -27,9 +33,9 @@ console.log(user2)
 console.log('-----------Test subscribers---------------')
 
 // Instances userChannels with name and channelName
-const channel0 = new Channel(user0.name, 'Mitchs Channel')
-const channel1 = new Channel(user1.name, 'Johns Channel')
-const channel2 = new Channel(user2.name, 'Peters Channel')
+const channel0 = createNewChannel(user0.name, 'Mitchs Channel')
+const channel1 = createNewChannel(user1.name, 'Johns Channel')
+const channel2 = createNewChannel(user2.name, 'Peters Channel')
 
 //Users can subscribe to other channels
 console.log(channel0) //    0 subscribers
