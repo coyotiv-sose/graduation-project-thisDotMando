@@ -11,13 +11,18 @@ const User = require('./user')
 const Channel = require('./channel')
 const Video = require('./video')
 
-const user0 = new User('Mitch', 'mitch@web.de', 36) // Instances user with name, email, age, newUser(boolean)
+// create a function to create a new user
+function createNewUser(name, email, age) {
+  return new User(name, email, age)
+}
 
-const user1 = new User('John', 'john@web.de', 17)
-
-const user2 = new User('Peter', 'pete@web.de', 19)
+const user0 = createNewUser('Mitch', 'mitch@web.de', 36) // Instances user with name, email, age, newUser(boolean)
+const user1 = createNewUser('John', 'john@web.de', 17)
+const user2 = createNewUser('Peter', 'pete@web.de', 19)
 
 console.log(user0)
+console.log(user1)
+console.log(user2)
 
 console.log('-----------Test subscribers---------------')
 
@@ -31,10 +36,7 @@ console.log(channel0) //    0 subscribers
 user1.subscribe(channel0)
 user2.subscribe(channel0)
 console.log(channel0) //   2 subscribers
-/*console.log('--------------------------')
-console.log(channel0.subscribers.length) // 2
-console.log('--------------------------')
-*/
+
 console.log('--------Test videoUploads + Deleting-----------------')
 
 //channel can create a counter with uploaded videos
@@ -42,3 +44,4 @@ channel0.uploadVideo(user0.createVideo('John Wick 6', 'Bad Ass Action Movie'))
 console.log(channel0) //   1 video uploaded
 //channel0.deleteVideo('Video2', 'Description2')
 //console.log(channel0) //  1 video uploaded
+console.log(user1)
