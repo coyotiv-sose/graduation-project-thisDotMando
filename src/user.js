@@ -13,17 +13,25 @@ module.exports = class User {
     this.videoList = []
   }
   addVideo(video) {
-    this.videos.push(video)
+    if (this.videos.includes(video) === false) {
+      this.videos.push(video)
+    } else {
+      return Error('Video already exists')
+    }
   }
   addChannel(channel) {
-    this.channels.push(channel)
+    if (this.channels.includes(channel) === false) {
+      this.channels.push(channel)
+    } else {
+      return
+    }
   }
   subscribe(channel) {
     if (channel.subscribedBy.includes(this) === false) {
       channel.subscribedBy.push(this)
       this.mySubscribtions.push(channel)
     } else {
-      return 'You are already subscribed to this channel'
+      return
     }
   }
   addVideoList(videoList) {
