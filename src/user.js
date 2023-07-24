@@ -1,26 +1,32 @@
 const Video = require('./video')
-const Channel = require('./channel')
+
 module.exports = class User {
-  channels = []
-  subscribedOtherUsers = []
   constructor(name, email, age) {
     this.name = name
     this.email = email
     this.age = age
+    this.channels = []
+    this.mySubscribtions = []
+    this.videos = []
+    this.videoList = []
+    this.subscribedBy = []
+    this.videoList = []
   }
-  createChannel(channelName) {
-    //User can create an own channel
-    const channel = new Channel(channelName, this)
-    return this.channels.push(channel)
+  addVideo(video) {
+    this.videos.push(video)
+  }
+  addChannel(channel) {
+    this.channels.push(channel)
   }
   subscribe(channel) {
-    //Users can subscribe to other channels
-    channel.subscribers.push(this.name) // add only the userName to the channel's subscribers list(Array)
-    return this.subscribedOtherUsers.push(channel) // add the channelName to the user's subscribedOtherUsers list(Array)
+    channel.subscribedBy.push(this)
+    this.mySubscribtions.push(channel)
   }
-  createVideo(title, description) {
-    //User can upload a video
-    const video = new Video(title, description, this)
-    return video
+  addVideoList(videoList) {
+    this.videoList.push(videoList)
+  }
+  likeVideo(video) {
+    video.likes++
+    video.likedBy.push(this.name, this.email, this.age)
   }
 }

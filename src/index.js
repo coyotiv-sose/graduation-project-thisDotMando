@@ -8,7 +8,6 @@
 //User can search for a video
 //User can see the most popular videos
 const User = require('./user')
-const Channel = require('./channel')
 const Video = require('./video')
 
 // create a function to create a new user
@@ -16,38 +15,26 @@ function createNewUser(name, email, age) {
   return new User(name, email, age)
 }
 
-function createNewChannel(name, owner) {
-  return new Channel(name, owner)
-}
-
 //creating new  User instances
-const user0 = createNewUser('Mitch', 'mitch@web.de', 36) // Instances user with name, email, age, newUser(boolean)
-const user1 = createNewUser('John', 'john@web.de', 17)
-const user2 = createNewUser('Peter', 'pete@web.de', 19)
+const mitch = createNewUser('Mitch', 'mitch@web.de', 36) // Instances user with name, email, age, newUser(boolean)
+const john = createNewUser('John', 'john@web.de', 17)
+const peter = createNewUser('Peter', 'pete@web.de', 19)
 
-//Test if the instances are created
-console.log(user0)
-console.log(user1)
-console.log(user2)
+//creating new Video instances
+const video1 = new Video('ICEage', 'animation')
 
-console.log('-----------Test subscribers---------------')
+//testing add-/like Video method
+console.log('*********Testing Add/Like -Video**************')
+mitch.addVideo(video1)
+john.likeVideo(video1)
 
-// Instances userChannels with name and channelName
-const channel0 = createNewChannel(user0.name, 'Mitchs Channel')
-const channel1 = createNewChannel(user1.name, 'Johns Channel')
-const channel2 = createNewChannel(user2.name, 'Peters Channel')
+//testing add Channel method
+mitch.addChannel('mitchsChannel')
 
-//Users can subscribe to other channels
-console.log(channel0) //    0 subscribers
-user1.subscribe(channel0)
-user2.subscribe(channel0)
-console.log(channel0) //   2 subscribers
-
-console.log('--------Test videoUploads + Deleting-----------------')
-
-//channel can create a counter with uploaded videos
-channel0.uploadVideo(user0.createVideo('John Wick 6', 'Bad Ass Action Movie'))
-console.log(channel0) //   1 video uploaded
-//channel0.deleteVideo('Video2', 'Description2')
-//console.log(channel0) //  1 video uploaded
-console.log(user1)
+//testing subscribe method
+john.subscribe(mitch)
+console.log('*********Testing Subscribe -Channel**************')
+console.log(john)
+console.log(mitch)
+console.log('*********Testing Subscribed input**************')
+console.log(john.mySubscribtions)

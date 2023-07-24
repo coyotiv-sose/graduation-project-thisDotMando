@@ -1,11 +1,9 @@
 module.exports = class Video {
-  views = 0
-  likes = []
-  dislikes = []
-
-  constructor(title, description, uploader) {
+  constructor(title, description) {
     this.title = title
     this.description = description
-    this.uploader = uploader.name
+    this.likedBy = []
+    this.likes = 0
+    this.views = 0
   }
 }
