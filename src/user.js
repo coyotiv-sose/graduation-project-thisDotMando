@@ -19,8 +19,12 @@ module.exports = class User {
     this.channels.push(channel)
   }
   subscribe(channel) {
-    channel.subscribedBy.push(this)
-    this.mySubscribtions.push(channel)
+    if (channel.subscribedBy.includes(this) === false) {
+      channel.subscribedBy.push(this)
+      this.mySubscribtions.push(channel)
+    } else {
+      return 'You are already subscribed to this channel'
+    }
   }
   addVideoList(videoList) {
     this.videoList.push(videoList)
