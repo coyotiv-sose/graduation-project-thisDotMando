@@ -23,6 +23,8 @@ const peter = createNewUser('Peter', 'pete@web.de', 19)
 //creating new Video instances
 const video1 = new Video('ICEage', 'animation')
 
+mitch.addVideoList(video1)
+
 //testing add-/like Video method
 console.log('*********Testing Add/Like -Video**************')
 mitch.addVideo(video1)
