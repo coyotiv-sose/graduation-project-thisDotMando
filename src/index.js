@@ -26,8 +26,9 @@ const video1 = new Video('ICEage', 'animation')
 //testing add-/like Video method
 console.log('*********Testing Add/Like -Video**************')
 mitch.addVideo(video1)
+mitch.likeVideo(video1)
 john.likeVideo(video1)
-
+console.log(mitch.videos)
 //testing add Channel method
 mitch.addChannel('mitchsChannel')
 
@@ -36,6 +37,3 @@ john.subscribe(mitch)
 console.log('*********Testing Subscribe -Channel**************')
 console.log(john)
 console.log(mitch)
-console.log('*********Testing Subscribed input**************')
-console.log(john.mySubscribtions)
-console.log(mitch.subscribedBy)
