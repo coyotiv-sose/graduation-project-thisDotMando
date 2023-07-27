@@ -16,7 +16,7 @@ module.exports = class User {
     if (this.videos.includes(video) === false) {
       this.videos.push(video)
     } else {
-      return Error('Video already exists')
+      return 'Video already exists'
     }
   }
   addChannel(channel) {

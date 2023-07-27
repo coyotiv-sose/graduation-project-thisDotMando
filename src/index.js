@@ -23,19 +23,20 @@ const peter = createNewUser('Peter', 'pete@web.de', 19)
 //creating new Video instances
 const video1 = new Video('ICEage', 'animation')
 
+//testing addVideoList method
 mitch.addVideoList(video1)
 
 //testing add-/like Video method
 console.log('*********Testing Add/Like -Video**************')
 mitch.addVideo(video1)
+mitch.addVideo(video1)
 mitch.likeVideo(video1)
 john.likeVideo(video1)
-console.log(mitch.videos)
+
 //testing add Channel method
 mitch.addChannel('mitchsChannel')
 
 //testing subscribe method
 john.subscribe(mitch)
 console.log('*********Testing Subscribe -Channel**************')
-console.log(john)
 console.log(mitch)
