@@ -7,6 +7,8 @@
 //User can comment and like a video
 //User can search for a video
 //User can see the most popular videos
+const axios = require('axios')
+
 const User = require('./user')
 const Video = require('./video')
 
