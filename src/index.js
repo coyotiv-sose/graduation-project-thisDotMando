@@ -11,8 +11,27 @@ const axios = require('axios')
 
 const User = require('./user')
 const Video = require('./video')
+const { response } = require('express')
 
-// create a function to create a new user
+//fetch users with axios
+
+/*axios.get('http://localhost:3000/users').then(res => {
+  console.log(res.data)
+})*/
+
+//create a user with axios
+async function main() {
+  const user = await axios.post('http://localhost:3000/users', {
+    name: 'Mitch',
+    email: 'blabla',
+    age: 36,
+  })
+  console.log(user.data)
+}
+
+main()
+
+/* create a function to create a new user
 function createNewUser(name, email, age) {
   return new User(name, email, age)
 }
@@ -42,3 +61,4 @@ mitch.addChannel('mitchsChannel')
 john.subscribe(mitch)
 console.log('*********Testing Subscribe -Channel**************')
 console.log(mitch)
+*/
