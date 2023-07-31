@@ -21,12 +21,19 @@ const { response } = require('express')
 
 //create a user with axios
 async function main() {
-  const user = await axios.post('http://localhost:3000/users', {
+  const mitch = await axios.post('http://localhost:3000/users', {
     name: 'Mitch',
     email: 'blabla',
     age: 36,
   })
-  console.log(user.data)
+
+  const john = await axios.post('http://localhost:3000/users', {
+    name: 'John',
+    email: 'blabliblub',
+    age: 17,
+  })
+  console.log(mitch.data)
+  console.log(john.data)
 }
 
 main()
