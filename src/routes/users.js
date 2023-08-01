@@ -5,13 +5,12 @@ var router = express.Router()
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-  res.send([{ name: 'John Doe' }, { name: 'Jane Doe' }, { name: 'Jim Doe' }])
+  res.send(User.list)
 })
-
 /* Create a new User */
 
 router.post('/', function (req, res, next) {
-  const user = new User(req.body.name, req.body.email, req.body.age)
+  const user = User.create(req.body)
   res.send(user)
 })
 
