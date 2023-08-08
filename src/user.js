@@ -8,10 +8,10 @@ module.exports = class User {
     this.channels = []
     this.mySubscribtions = []
     this.videos = []
-    this.videoList = []
+    this.videoLists = []
     this.subscribedBy = []
-    this.videoList = []
   }
+
   addVideo(video) {
     if (this.videos.includes(video) === false) {
       this.videos.push(video)
@@ -41,4 +41,20 @@ module.exports = class User {
     video.likes++
     video.likedBy.push(this.name, this.email, this.age)
   }
+//create video method
+  createVideo(title, description) {
+    const newVideo = Video.create({title, description})
+    this.videos.push(newVideo)
+    return newVideo
+  }
+
+  //create new Video
+
+  static create({ name, email, age }) {
+    const newUser = new User(name, email, age)
+
+    User.list.push(newUser)
+    return newUser
+  }
+  static list = []
 }

@@ -10,9 +10,9 @@
 const axios = require('axios')
 
 const User = require('./user')
-const Video = require('./video')
-const { response } = require('express')
 
+const { response } = require('express')
+axios.defaults.baseURL = 'http://localhost:3000'
 //fetch users with axios
 
 /*axios.get('http://localhost:3000/users').then(res => {
@@ -21,19 +21,27 @@ const { response } = require('express')
 
 //create a user with axios
 async function main() {
-  const mitch = await axios.post('http://localhost:3000/users', {
+  await axios.post('/users', {
     name: 'Mitch',
     email: 'blabla',
     age: 36,
   })
 
-  const john = await axios.post('http://localhost:3000/users', {
+  await axios.post('/users', {
     name: 'John',
     email: 'blabliblub',
     age: 17,
   })
-  console.log(mitch.data)
-  console.log(john.data)
+
+  //create a video with axios
+  await axios.post('/videos', {
+    title: 'ICEage',
+    description: 'animation',
+    user: 'Mitch',
+  })
+  //get all users
+  const allUsers = await axios.get('/users')
+  console.log('List of all Users:\n ', allUsers.data)
 }
 
 main()
