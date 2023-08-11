@@ -1,17 +1,16 @@
 var express = require('express')
-const { register } = require('tsconfig-paths')
-const User = require('../user')
-const Video = require('../video')
+const User = require('../models/user')
 var router = express.Router()
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
   res.send(User.list)
 })
+
 /* Create a new User */
 
-router.post('/', function (req, res, next) {
-  const user = User.create(req.body)
+router.post('/', async function (req, res, next) {
+  const user = await User.create({ name: req.body.name, email: req.body.email, age: req.body.age })
   res.send(user)
 })
 

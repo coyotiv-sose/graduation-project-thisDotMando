@@ -1,3 +1,4 @@
+
 body {
   padding: 50px;
   font: 14px "Calibri", Helvetica, Arial, sans-serif;
@@ -22,8 +23,5 @@ font-style:  italic;
 }
 .title {
   margin-bottom: 10px 0;
-  padding: 10px;
-  border: 1px solid #eee;
-  border-radius: 5px;
-  background-color: #03b40c;
+  color: blueviolet;
 }

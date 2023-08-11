@@ -9,9 +9,6 @@
 //User can see the most popular videos
 const axios = require('axios')
 
-const User = require('./user')
-
-const { response } = require('express')
 axios.defaults.baseURL = 'http://localhost:3000'
 //fetch users with axios
 
@@ -34,14 +31,30 @@ async function main() {
   })
 
   //create a video with axios
-  await axios.post('/videos', {
+  const mitchsVideo = await axios.post('/videos', {
     title: 'ICEage',
     description: 'animation',
     user: 'Mitch',
   })
   //get all users
-  const allUsers = await axios.get('/users')
+  /* const allUsers = await axios.get('/users')
   console.log('List of all Users:\n ', allUsers.data)
+
+  const like = await axios.post(`/videos/${mitchsVideo.data.title}/likes`, {
+    user: 'John',
+  })
+
+  //User 'mitch' creates a channel
+  const mitchsChannel = await axios.post('/channels', {
+    name: 'mitchsChannel',
+    user: 'Mitch',
+  })
+  console.log('mitchsChannel: ', mitchsChannel.data)
+
+  //john subscribe mitchsChannel
+  const subscribe = await axios.post(`/channels/${mitchsChannel.data.name}/subscribedBy`, {
+    user: 'John',
+  }) */
 }
 
 main()
