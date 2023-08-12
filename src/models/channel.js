@@ -7,14 +7,8 @@ const channelSchema = new mongoose.Schema({
   creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 })
 
-class Channel {
-  constructor(name, creator) {
-    this.name = name
-    this.subscribedBy = []
-    this.videos = []
-    this.creator = creator
-  }
-
+class Channel {}
+/*
   static create({ name, creator }) {
     const newChannel = new Channel(name, creator)
     Channel.list.push(newChannel)
@@ -22,5 +16,6 @@ class Channel {
   }
 
   static list = []
-}
+} */
+channelSchema.loadClass(Channel)
 module.exports = mongoose.model('Channel', channelSchema)

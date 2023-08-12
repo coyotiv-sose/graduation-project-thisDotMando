@@ -13,29 +13,6 @@ const userSchema = new mongoose.Schema({
 })
 
 class User {
-  addVideo(video) {
-    if (this.videos.includes(video) === false) {
-      this.videos.push(video)
-    } else {
-      return 'Video already exists'
-    }
-  }
-
-  subscribe(channel) {
-    if (channel.subscribedBy.includes(this) === false) {
-      channel.subscribedBy.push(this)
-      this.mySubscribtions.push(channel.name)
-    } else {
-      return
-    }
-  }
-  addVideoList(videoList) {
-    this.videoList.push(videoList)
-  }
-  likeVideo(video) {
-    video.likes++
-    video.likedBy.push(this.name)
-  }
   //create video method
   async createVideo(title, description) {
     const newVideo = await Video.create({ title, description, creator: this })
@@ -44,16 +21,47 @@ class User {
     return newVideo
   }
 
+  /*  async addVideo(video) {
+    if (this.videos.includes(video) === false) {
+      this.videos.push(video)
+      await this.save()
+    } else {
+      return 'Video already exists'
+    }
+  }
+
+  async subscribe(channel) {
+    if (channel.subscribedBy.includes(this) === false) {
+      channel.subscribedBy.push(this)
+      this.mySubscribtions.push(channel.name)
+      await this.save()
+    } else {
+      return
+    }
+  }
+
+  async addVideoList(videoList) {
+    this.videoList.push(videoList)
+    await this.save()
+  }
+
+  async likeVideo(video) {
+    video.likes++
+    video.likedBy.push(this.name)
+    await video.save()
+  }
+
   //create channel method
-  createChannel(name) {
+  async createChannel(name) {
     if (this.channels.includes(name) === true) {
       return 'Channel already exists'
     } else {
-      const newChannel = Channel.create({ name, creator: this.name })
+      const newChannel = await Channel.create({ name, creator: this })
       this.channels.push(newChannel)
+      await this.save()
       return newChannel
     }
-  }
+  } */
 }
 userSchema.loadClass(User)
 module.exports = mongoose.model('User', userSchema)

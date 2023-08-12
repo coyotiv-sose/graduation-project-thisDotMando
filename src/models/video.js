@@ -8,24 +8,7 @@ const videoSchema = new mongoose.Schema({
   views: Number,
   creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 })
+class Video {}
 
-class Video {
-  constructor(title, description, creator) {
-    this.title = title
-    this.description = description
-    this.likedBy = []
-    this.likes = 0
-    this.views = 0
-    this.creator = creator.name
-  }
-
-  /* static create({ title, description, creator }) {
-    const newVideo = new Video(title, description, creator)
-
-    Video.list.push(newVideo)
-    return newVideo
-  }
-
-  static list = [] */
-}
+videoSchema.loadClass(Video)
 module.exports = mongoose.model('Video', videoSchema)

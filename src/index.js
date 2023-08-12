@@ -8,6 +8,7 @@
 //User can search for a video
 //User can see the most popular videos
 const axios = require('axios')
+const user = require('./models/user')
 
 axios.defaults.baseURL = 'http://localhost:3000'
 //fetch users with axios
@@ -18,15 +19,15 @@ axios.defaults.baseURL = 'http://localhost:3000'
 
 //create a user with axios
 async function main() {
-  await axios.post('/users', {
+  const mitch = await axios.post('/users', {
     name: 'Mitch',
-    email: 'blabla',
+    email: 'mitch@web.de',
     age: 36,
   })
 
   await axios.post('/users', {
     name: 'John',
-    email: 'blabliblub',
+    email: 'john@web.de',
     age: 17,
   })
 
@@ -34,10 +35,11 @@ async function main() {
   const mitchsVideo = await axios.post('/videos', {
     title: 'ICEage',
     description: 'animation',
-    user: 'Mitch',
+    user: mitch.data._id,
   })
+
   //get all users
-  /* const allUsers = await axios.get('/users')
+  const allUsers = await axios.get('/users')
   console.log('List of all Users:\n ', allUsers.data)
 
   const like = await axios.post(`/videos/${mitchsVideo.data.title}/likes`, {
@@ -47,12 +49,11 @@ async function main() {
   //User 'mitch' creates a channel
   const mitchsChannel = await axios.post('/channels', {
     name: 'mitchsChannel',
-    user: 'Mitch',
+    user: mitch.data._id,
   })
-  console.log('mitchsChannel: ', mitchsChannel.data)
 
   //john subscribe mitchsChannel
-  const subscribe = await axios.post(`/channels/${mitchsChannel.data.name}/subscribedBy`, {
+  /*  const subscribe = await axios.post(`/channels/${mitchsChannel.data.name}/subscribedBy`, {
     user: 'John',
   }) */
 }

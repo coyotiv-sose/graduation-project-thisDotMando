@@ -3,8 +3,8 @@ const User = require('../models/user')
 var router = express.Router()
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.send(User.list)
+router.get('/', async function (req, res, next) {
+  res.send(await User.find())
 })
 
 /* Create a new User */
