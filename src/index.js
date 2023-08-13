@@ -61,6 +61,10 @@ async function main() {
   const mitchsVideoList = await axios.post(`/users/${mitch.data._id}/videoLists`, {
     name: 'mitchsVideoList',
   })
+  //add video to video list
+  const addVideo = await axios.post(`/users/${mitch.data._id}/videoLists/${mitchsVideoList.data._id}/videos`, {
+    video: mitchsVideo.data._id,
+  })
 }
 
 main().catch(error => {

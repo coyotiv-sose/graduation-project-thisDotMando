@@ -14,9 +14,25 @@ router.post('/', async function (req, res, next) {
   res.send(user)
 })
 //create a videolist
-router.post('/:id/videolists', async function (req, res, next) {
+router.post('/:id/videoLists', async function (req, res, next) {
   const user = await User.findById(req.params.id)
-  const videolist = await user.createVideoLists(req.body.name)
+  const videolist = await user.createVideoList(req.body.name)
+  await user.createVideoList(videolist)
   res.send(videolist)
 })
+
+//add video to videolist
+router.post('/:id/videoLists/', async function (req, res, next) {
+  const user = await User.findById(req.params.id)
+  const videolist = await user.createVideoList(req.body.name)
+  await user.addVideoToVideoLists(videolist)
+  res.send(videolist)
+})
+
+/* router.post('/:id/videoLists/', async function (req, res, next) {
+  const user = await User.findById(req.params.id)
+  const videolist = await Video.findById(req.body.id)
+  await user.addVideoToVideoLists(videolist)
+  res.send(videolist)
+}) */
 module.exports = router

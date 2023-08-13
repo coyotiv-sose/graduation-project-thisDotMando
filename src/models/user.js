@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   channels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel', autopopulate: true }],
   mySubscribtions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel' }],
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video', autopopulate: true }],
-  videoLists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'VideoList', autopopulate: true }],
+  videoLists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }],
 })
 
 class User {
@@ -25,21 +25,18 @@ class User {
     if (this.videosLists.includes(videos) === false) {
       this.videosLists.push(videos)
       await this.save()
+      await videos.save()
+      return videos
     } else {
       return 'Video already exists'
     }
   }
 
-  //create a video list
   async createVideoList(name) {
-    if (this.videoLists.includes(name) === true) {
-      return 'VideoList already exists'
-    } else {
-      const newVideoList = await User.create({ name, creator: this })
-      this.videoLists.push(newVideoList)
-      await this.save()
-      return newVideoList
-    }
+    const newVideoList = await Channel.create({ name, creator: this })
+    this.videoLists.push(newVideoList)
+    await this.save()
+    return newVideoList
   }
 
   async likeVideo(video) {
@@ -65,6 +62,8 @@ class User {
       return 'You are already subscribed'
     } else {
       this.mySubscribtions.push(channel)
+      channel.subscribedBy.push(this)
+      await channel.save()
       await this.save()
       return channel
     }
