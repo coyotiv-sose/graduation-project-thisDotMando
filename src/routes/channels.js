@@ -16,10 +16,14 @@ router.get('/', async function (req, res, next) {
 })
 
 /*subscribe to a channel*/
-router.post('/:id/subscribedBy', async function (req, res, next) {
-  const channel = await Channel.findById(req.params.id)
-  const user = await User.findById(req.body.id)
-  user.subscribe(channel.id)
-  res.send(user)
+router.post('/:id/subscribtions', async function (req, res, next) {
+  const channel = await Channel.findById(req.params._id)
+  const user = await User.findById(req.body.user)
+  if (user.name === channel.creator) {
+    res.send('You can not subscribe to your own channel')
+  } else {
+    user.subscribe(channel)
+    res.send(user)
+  }
 })
 module.exports = router

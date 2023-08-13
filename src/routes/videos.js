@@ -7,7 +7,7 @@ var router = express.Router()
 
 /* GET videos listing. */
 router.get('/', async function (req, res, next) {
-  res.send(await Video.find())
+  res.send(await Video.findBy())
 })
 
 /* Create a new Video */
@@ -17,10 +17,10 @@ router.post('/', async function (req, res, next) {
   res.send(video)
 })
 
-/* router.post('/:title/likes', async function (req, res, next) {
+router.post('/:id/likes', async function (req, res, next) {
   try {
-    const video = await Video.list.find(video => video.title === req.params.title)
-    const user = await User.list.find(user => user.name === req.body.user)
+    const video = await Video.findById(req.params.id)
+    const user = await User.findById(req.body.user)
     if (user.name === video.creator) {
       res.send('You can not like your own video')
     } else {
@@ -30,6 +30,6 @@ router.post('/', async function (req, res, next) {
   } catch (err) {
     res.send(err.message)
   }
-}) */
+})
 
 module.exports = router

@@ -25,7 +25,7 @@ async function main() {
     age: 36,
   })
 
-  await axios.post('/users', {
+  const john = await axios.post('/users', {
     name: 'John',
     email: 'john@web.de',
     age: 17,
@@ -42,8 +42,9 @@ async function main() {
   const allUsers = await axios.get('/users')
   console.log('List of all Users:\n ', allUsers.data)
 
-  const like = await axios.post(`/videos/${mitchsVideo.data.title}/likes`, {
-    user: 'John',
+  //john likes mitchs video
+  const like = await axios.post(`/videos/${mitchsVideo.data._id}/likes`, {
+    user: john.data._id,
   })
 
   //User 'mitch' creates a channel
@@ -53,12 +54,14 @@ async function main() {
   })
 
   //john subscribe mitchsChannel
-  /*  const subscribe = await axios.post(`/channels/${mitchsChannel.data.name}/subscribedBy`, {
-    user: 'John',
-  }) */
+  const subscribe = await axios.post(`/channels/${mitchsChannel.data._id}/subscribedBy`, {
+    user: john.data._id,
+  })
 }
 
-main()
+main().catch(error => {
+  console.log(error.message ? error.message : error)
+})
 
 /* create a function to create a new user
 function createNewUser(name, email, age) {
