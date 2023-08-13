@@ -57,6 +57,10 @@ async function main() {
   const subscribe = await axios.post(`/channels/${mitchsChannel.data._id}/subscribedBy`, {
     user: john.data._id,
   })
+  //create a video list
+  const mitchsVideoList = await axios.post(`/users/${mitch.data._id}/videoLists`, {
+    name: 'mitchsVideoList',
+  })
 }
 
 main().catch(error => {

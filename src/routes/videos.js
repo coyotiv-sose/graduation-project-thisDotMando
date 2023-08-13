@@ -7,7 +7,7 @@ var router = express.Router()
 
 /* GET videos listing. */
 router.get('/', async function (req, res, next) {
-  res.send(await Video.findBy())
+  res.send(await Video.find())
 })
 
 /* Create a new Video */

@@ -6,16 +6,16 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: String,
   age: Number,
-  channels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel' }],
+  channels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel', autopopulate: true }],
   mySubscribtions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel' }],
-  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video' }],
-  videoLists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'VideoList' }],
+  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video', autopopulate: true }],
+  videoLists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'VideoList', autopopulate: true }],
 })
 
 class User {
   //create video method
   async createVideo(title, description) {
-    const newVideo = await Video.create({ title, description, creator: this.name })
+    const newVideo = await Video.create({ title, description, creator: this })
     this.videos.push(newVideo)
     await this.save()
     return newVideo
@@ -30,10 +30,16 @@ class User {
     }
   }
 
-  async createVideoLists(videoLists) {
-    this.videoLists.push(videoLists)
-    await this.save()
-    return videoLists
+  //create a video list
+  async createVideoList(name) {
+    if (this.videoLists.includes(name) === true) {
+      return 'VideoList already exists'
+    } else {
+      const newVideoList = await User.create({ name, creator: this })
+      this.videoLists.push(newVideoList)
+      await this.save()
+      return newVideoList
+    }
   }
 
   async likeVideo(video) {

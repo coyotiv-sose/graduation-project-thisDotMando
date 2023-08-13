@@ -7,7 +7,7 @@ var router = express.Router()
 router.post('/', async function (req, res, next) {
   const user = await User.findById(req.body.user)
   const channel = await user.createChannel(req.body.name)
-  res.send(channel.id)
+  res.send(channel)
 })
 
 /* GET channels listing. */
@@ -16,14 +16,15 @@ router.get('/', async function (req, res, next) {
 })
 
 /*subscribe to a channel*/
-router.post('/:id/subscribtions', async function (req, res, next) {
-  const channel = await Channel.findById(req.params._id)
+router.post('/:id/subscribedBy', async function (req, res, next) {
+  const channel = await Channel.findById(req.params.id)
   const user = await User.findById(req.body.user)
-  if (user.name === channel.creator) {
+  if (user.name === channel.creator.name) {
     res.send('You can not subscribe to your own channel')
   } else {
-    user.subscribe(channel)
+    await user.subscribe(channel)
     res.send(user)
   }
 })
+
 module.exports = router

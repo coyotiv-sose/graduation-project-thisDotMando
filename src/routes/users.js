@@ -13,5 +13,10 @@ router.post('/', async function (req, res, next) {
   const user = await User.create({ name: req.body.name, email: req.body.email, age: req.body.age })
   res.send(user)
 })
-
+//create a videolist
+router.post('/:id/videolists', async function (req, res, next) {
+  const user = await User.findById(req.params.id)
+  const videolist = await user.createVideoLists(req.body.name)
+  res.send(videolist)
+})
 module.exports = router
