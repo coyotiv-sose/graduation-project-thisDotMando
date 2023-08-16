@@ -58,13 +58,38 @@ async function main() {
     user: john.data._id,
   })
   //create a video list
-  const mitchsVideoList = await axios.post(`/users/${mitch.data._id}/videoLists`, {
+  const mitchsVideoList = await axios.post('/videoLists', {
     name: 'mitchsVideoList',
+    user: mitch.data._id,
   })
-  //add video to video list
+
+  ///add video to video list *****failed :-( ***** 404 not found *****failed :-(
   const addVideo = await axios.post(`/users/${mitch.data._id}/videoLists/${mitchsVideoList.data._id}/videos`, {
     video: mitchsVideo.data._id,
   })
+
+  //************************TODO+LIST***************************************************************/
+
+  //dislike video
+  /*const dislike = await axios.delete(`/videos/${mitchsVideo.data._id}/likes/${like.data._id}`)
+
+ //delete video
+  const deleteVideo = await axios.delete(`/videos/${mitchsVideo.data._id}`)
+
+  //delete channel
+  const deleteChannel = await axios.delete(`/channels/${mitchsChannel.data._id}`)
+
+  //delete video list
+  const deleteVideoList = await axios.delete(`/users/${mitch.data._id}/videoLists/${mitchsVideoList.data._id}`)
+
+  //unsubscribe channel
+  const unsubscribe = await axios.delete(`/channels/${mitchsChannel.data._id}/subscribedBy/${subscribe.data._id}`)
+
+  //delete video from videolists
+  const deleteVideoFromVideoList = await axios.delete(`/users/${mitch.data._id}/videoLists/${mitchsVideoList.data._id}/videos/${addVideo.data._id}`)
+
+  //delete user
+  const deleteUser = await axios.delete(`/users/${john.data._id}`) */
 }
 
 main().catch(error => {

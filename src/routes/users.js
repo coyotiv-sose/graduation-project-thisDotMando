@@ -25,10 +25,5 @@ router.post('/:id/videoLists/:videoListsId/videos', async function (req, res, ne
   const updatedVideoList = await user.addVideoToVideoList(video, videoList)
   res.send(updatedVideoList)
 })
-//1) find the user id
-//2) find the video-list id
-//3) find the video id
-//4) add the video to the video list
-//5) send the video-list back
 
 module.exports = router
