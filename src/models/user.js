@@ -1,7 +1,7 @@
 const Video = require('./video')
 const Channel = require('./channel')
 const mongoose = require('mongoose')
-
+const VideoList = require('./videoList')
 const userSchema = new mongoose.Schema({
   name: String,
   email: String,
@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   channels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel', autopopulate: true }],
   mySubscribtions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel' }],
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video', autopopulate: true }],
-  videoLists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }],
+  videoLists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'VideoList', autopopulate: true }],
 })
 
 class User {
@@ -21,19 +21,14 @@ class User {
     return newVideo
   }
 
-  async addVideoToVideoLists(videos) {
-    if (this.videosLists.includes(videos) === false) {
-      this.videosLists.push(videos)
-      await this.save()
-      await videos.save()
-      return videos
-    } else {
-      return 'Video already exists'
-    }
+  async addVideoToVideoList(video, videoList) {
+    videoList.videos.push(video)
+    await videoList.save()
+    return videoList
   }
 
   async createVideoList(name) {
-    const newVideoList = await Channel.create({ name, creator: this })
+    const newVideoList = await VideoList.create({ name, creator: this })
     this.videoLists.push(newVideoList)
     await this.save()
     return newVideoList

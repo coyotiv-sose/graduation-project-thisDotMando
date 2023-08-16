@@ -11,6 +11,7 @@ var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var videosRouter = require('./routes/videos')
 var channelsRouter = require('./routes/channels')
+var videoListsRouter = require('./routes/videoLists')
 var app = express()
 
 // view engine setup
@@ -27,7 +28,7 @@ app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/videos', videosRouter)
 app.use('/channels', channelsRouter)
-
+app.use('/videoLists', videoListsRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404))
