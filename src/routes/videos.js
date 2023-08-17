@@ -20,6 +20,7 @@ router.post('/', async function (req, res, next) {
 router.post('/:id/likes', async function (req, res, next) {
   const video = await Video.findById(req.params.id)
   const user = await User.findById(req.body.user)
+
   if (user.name === video.creator) {
     res.send('You can not like your own video')
   } else {
@@ -27,15 +28,15 @@ router.post('/:id/likes', async function (req, res, next) {
     res.send(video)
   }
 })
-/*User delete his like on mitchs video*/
-router.delete('/:id/likes', async function (req, res, next) {
+/* peter dislike mitchs video */
+router.patch('/:id/likes', async function (req, res, next) {
   const video = await Video.findById(req.params.id)
   const user = await User.findById(req.body.user)
-  if (!video || !user) {
-    return res.status(404).send('Video or user not found')
-  } else {
-    user.dislikeVideo(video)
+  if (video.likedBy.some(person => person.id === user.id)) {
+    await user.dislikeVideo(video)
     res.send(video)
+  } else {
+    res.send('You have not liked this video yet')
   }
 })
 

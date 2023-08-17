@@ -11,11 +11,6 @@ const axios = require('axios')
 const user = require('./models/user')
 
 axios.defaults.baseURL = 'http://localhost:3000'
-//fetch users with axios
-
-/*axios.get('http://localhost:3000/users').then(res => {
-  console.log(res.data)
-})*/
 
 //create a user with axios
 async function main() {
@@ -23,6 +18,12 @@ async function main() {
     name: 'Mitch',
     email: 'mitch@web.de',
     age: 36,
+  })
+
+  const peter = await axios.post('/users', {
+    name: 'Peter',
+    email: 'peter@web.de',
+    age: 19,
   })
 
   const john = await axios.post('/users', {
@@ -46,6 +47,14 @@ async function main() {
   const like = await axios.post(`/videos/${mitchsVideo.data._id}/likes`, {
     user: john.data._id,
   })
+  const like2 = await axios.post(`/videos/${mitchsVideo.data._id}/likes`, {
+    user: peter.data._id,
+  })
+
+  //delete peters like from mitchs video
+  const deleteLike = await axios.patch(`/videos/${mitchsVideo.data._id}/likes`, {
+    user: peter.data._id,
+  })
 
   //User 'mitch' creates a channel
   const mitchsChannel = await axios.post('/channels', {
@@ -63,17 +72,14 @@ async function main() {
     user: mitch.data._id,
   })
 
-  ///add video to video list *****failed :-( ***** 404 not found *****failed :-(
+  ///add video to video list
   const addVideo = await axios.post(`/users/${mitch.data._id}/videoLists/${mitchsVideoList.data._id}/videos`, {
     video: mitchsVideo.data._id,
   })
 
   //************************TODO+LIST***************************************************************/
 
-  //dislike video
-  /*const dislike = await axios.delete(`/videos/${mitchsVideo.data._id}/likes/${like.data._id}`)
-
- //delete video
+  /* //delete video
   const deleteVideo = await axios.delete(`/videos/${mitchsVideo.data._id}`)
 
   //delete channel
@@ -86,10 +92,10 @@ async function main() {
   const unsubscribe = await axios.delete(`/channels/${mitchsChannel.data._id}/subscribedBy/${subscribe.data._id}`)
 
   //delete video from videolists
-  const deleteVideoFromVideoList = await axios.delete(`/users/${mitch.data._id}/videoLists/${mitchsVideoList.data._id}/videos/${addVideo.data._id}`)
+  const deleteVideoFromVideoList = await axios.delete(`/users/${mitch.data._id}/videoLists/${mitchsVideoList.data._id}/videos/${mitchsVideo.data._id}`)
 
   //delete user
-  const deleteUser = await axios.delete(`/users/${john.data._id}`) */
+  const deleteUser = await axios.delete(`/users/${john.data._id}`)  */
 }
 
 main().catch(error => {

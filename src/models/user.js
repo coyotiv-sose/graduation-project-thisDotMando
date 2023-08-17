@@ -40,6 +40,14 @@ class User {
     await video.save()
     return video
   }
+  //peter dislike mitchs video
+  async dislikeVideo(video) {
+    video.likedBy.pull(this)
+    video.likes -= 1
+    await video.save()
+
+    return video
+  }
 
   //create channel method
   async createChannel(name) {

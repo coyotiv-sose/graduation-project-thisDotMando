@@ -6,7 +6,6 @@ var router = express.Router()
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
-  // http://localhost:3000/users
   res.send(await User.find())
 })
 
