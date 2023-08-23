@@ -22,6 +22,9 @@ class User {
   }
 
   async addVideoToVideoList(video, videoList) {
+    if (videoList.videos.includes(video)) {
+      throw new Error('Video already in videoList')
+    }
     videoList.videos.push(video)
     await videoList.save()
     return videoList
@@ -35,18 +38,35 @@ class User {
   }
 
   async likeVideo(video) {
+    // if (video.likedBy.some(person => person.id === this.id)) {
+    //   return 'You already liked this video'
+    // } else {
     video.likes += 1
     video.likedBy.push(this)
     await video.save()
     return video
+    // }
   }
   //peter dislike mitchs video
-  async dislikeVideo(video) {
-    video.likedBy.pull(this)
-    video.likes -= 1
-    await video.save()
 
-    return video
+  async dislikeVideo(video) {
+    if (video.likedBy.some(person => person.id === this.id)) {
+      video.likedBy.pull(this)
+      video.likes -= 1
+      await video.save()
+      return video
+    } else {
+      return 'You already disliked this video'
+    }
+  }
+
+  //unsubscribe from channel
+  async unsubscribe(channel) {
+    this.mySubscribtions.pull(channel)
+    channel.subscribedBy.pull(this)
+    await channel.save()
+    await this.save()
+    return channel
   }
 
   //create channel method

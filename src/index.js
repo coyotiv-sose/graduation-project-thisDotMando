@@ -1,5 +1,5 @@
 //Goal creating a website with video streming content
-//XXXX User can create an account and login to the website
+//XXXX User can create an account and clearin to the website
 //XXXX User can create an own channel and subscribe to other channels//
 //User can create a list with uploadede videos
 //User can upload a video and it will be streamed to the website
@@ -47,8 +47,15 @@ async function main() {
   const like = await axios.post(`/videos/${mitchsVideo.data._id}/likes`, {
     user: john.data._id,
   })
+  const likeAgain = await axios.post(`/videos/${mitchsVideo.data._id}/likes`, {
+    user: john.data._id,
+  })
+  console.log(likeAgain.data)
   const like2 = await axios.post(`/videos/${mitchsVideo.data._id}/likes`, {
     user: peter.data._id,
+  })
+  const like3 = await axios.post(`/videos/${mitchsVideo.data._id}/likes`, {
+    user: john.data._id,
   })
 
   //delete peters like from mitchs video
@@ -75,6 +82,10 @@ async function main() {
   ///add video to video list
   const addVideo = await axios.post(`/users/${mitch.data._id}/videoLists/${mitchsVideoList.data._id}/videos`, {
     video: mitchsVideo.data._id,
+  })
+
+  const unsubscribe = await axios.patch(`/channels/${mitchsChannel.data._id}/subscribedBy`, {
+    user: john.data._id,
   })
 
   //************************TODO+LIST***************************************************************/
