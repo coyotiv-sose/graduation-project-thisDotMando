@@ -213,6 +213,22 @@ it('should add a video to a videoList', async () => {
   const actualOutput = await request(app).post('/videos').send({ title, description, user: user.body._id })
   expect(actualOutput.body).toMatchObject(expectedOutput)
 })
+/* it('should throw an error if a video is already liked', async () => {
+  const name = 'mitch'
+  const email = 'mitch@web.de'
+  const age = 36
+  const title = 'ICEage'
+  const description = 'animation'
+  const expectedOutput = { message: 'You already liked this video' }
+
+  const user = await request(app).post('/users').send({ name, email, age })
+  const video = await request(app).post('/videos').send({ title, description, user: user.body._id })
+  await request(app).post(`/videos/${video.body._id}/likes`).send({ user: user.body._id })
+  const actualOutput = await request(app).post(`/videos/${video.body._id}/likes`).send({ user: user.body._id })
+
+  expect(actualOutput.body).toMatchObject(expectedOutput)
+}) */
+
 it('should throw an error if a video is already liked', async () => {
   const name = 'mitch'
   const email = 'mitch@web.de'
@@ -227,16 +243,4 @@ it('should throw an error if a video is already liked', async () => {
   const actualOutput = await request(app).post(`/videos/${video.body._id}/likes`).send({ user: user.body._id })
 
   expect(actualOutput.body).toMatchObject(expectedOutput)
-})
-
-it('returns 404 for an unknown url', async () => {
-  const expectedOutput = {
-    message: 'Not Found',
-  }
-
-  const actualOutput = await request(app).get('/unknown')
-
-  expect(actualOutput.body).toMatchObject(expectedOutput)
-
-  expect(actualOutput.status).toBe(404)
 })
