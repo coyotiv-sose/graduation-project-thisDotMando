@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   email: String,
   age: Number,
   channels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel', autopopulate: true }],
-  mySubscribtions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel' }],
+  mySubscribtions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel', autopopulate: true }],
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video', autopopulate: true }],
   videoLists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'VideoList', autopopulate: true }],
 })
@@ -22,9 +22,6 @@ class User {
   }
 
   async addVideoToVideoList(video, videoList) {
-    if (videoList.videos.includes(video)) {
-      throw new Error('Video already in videoList')
-    }
     videoList.videos.push(video)
     await videoList.save()
     return videoList
@@ -38,14 +35,10 @@ class User {
   }
 
   async likeVideo(video) {
-    // if (video.likedBy.some(person => person.id === this.id)) {
-    //   return 'You already liked this video'
-    // } else {
     video.likes += 1
     video.likedBy.push(this)
     await video.save()
     return video
-    // }
   }
   //peter dislike mitchs video
 
@@ -92,5 +85,6 @@ class User {
     }
   }
 }
+userSchema.plugin(autopopulate)
 userSchema.loadClass(User)
 module.exports = mongoose.model('User', userSchema)

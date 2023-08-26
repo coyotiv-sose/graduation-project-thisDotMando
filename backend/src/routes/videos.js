@@ -23,10 +23,12 @@ router.post('/:id/likes', async function (req, res, next) {
 
   if (user.name === video.creator) {
     res.send('You can not like your own video')
-  } else {
-    user.likeVideo(video)
-    res.send(video)
   }
+  if (video.likedBy.some(person => person.id === user.id)) {
+    return next({ status: 404, message: 'You already liked this video' })
+  }
+  await user.likeVideo(video)
+  res.send(video)
 })
 /* peter dislike mitchs video */
 router.patch('/:id/likes', async function (req, res, next) {
