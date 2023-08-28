@@ -12,7 +12,17 @@ var usersRouter = require('./routes/users')
 var videosRouter = require('./routes/videos')
 var channelsRouter = require('./routes/channels')
 var videoListsRouter = require('./routes/videoLists')
+var cors = require('cors')
+
 var app = express()
+
+// CORS
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
