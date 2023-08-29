@@ -24,7 +24,7 @@ export default {
 <template>
   <main>
     <h1>Here are all properties of the created videos</h1>
-    <div v-for="video in videos" :key="video.id">
+    <div v-for="video in videos">
       <h2>Title: {{ video.title }}</h2>
       <h3>Description: {{ video.description }}</h3>
       <p>{{ video.creator }}</p>

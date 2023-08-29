@@ -24,7 +24,7 @@ export default {
 <template>
   <main>
     <h1>Here are all users</h1>
-    <div v-for="user in users" :key="user.id">
+    <div v-for="user in users">
       <h2>
         {{ user.name }}
       </h2>

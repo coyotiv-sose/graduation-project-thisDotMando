@@ -3,12 +3,13 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
+  <h1>Welcome to meTube</h1>
   <header>
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/users">Users</RouterLink>
-        <RouterLink to="/videoDetails">Videos</RouterLink>
+        <RouterLink to="/users/:id">Users</RouterLink>
+        <RouterLink to="/videoDetails/:id">Videos</RouterLink>
       </nav>
     </div>
   </header>
@@ -23,7 +24,12 @@ nav {
   text-align: center;
   margin-top: 2rem;
 }
-
+h1 {
+  color: rgb(124, 56, 119);
+  font-style: oblique;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
+    Verdana, sans-serif;
+}
 nav a.router-link-exact-active {
   color: var(--color-text);
 }
