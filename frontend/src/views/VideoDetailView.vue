@@ -5,16 +5,16 @@ export default {
   components: {},
   data() {
     return {
-      videos: []
+      video: {}
     }
   },
   async mounted() {
-    this.videos = await this.getVideos()
+    this.video = await this.getVideo()
   },
 
   methods: {
-    async getVideos() {
-      return (await axios.get('http://localhost:3000/videos')).data
+    async getVideo() {
+      return (await axios.get(`http://localhost:3000/videos/${this.$route.params.id}`)).data
     }
   }
 }
@@ -22,13 +22,8 @@ export default {
 
 <template>
   <h1>Video Detail Page</h1>
-  <div v-for="video in videos" :key="video._id">
-    <div v-if="video._id === $route.params.id">
-      <h2>{{ video.title }}</h2>
-      <h3>{{ video.description }}</h3>
-      <p>{{ video.creator }}</p>
-      <p>{{ video.likedBy }}</p>
-      <h4>{{ video.likes }}</h4>
-    </div>
-  </div>
+  <h2>{{ video.title }}</h2>
+  <h3>{{ video.description }}</h3>
+  <p>{{ video.creator.name }}</p>
+  <h4>{{ video.likes }}</h4>
 </template>

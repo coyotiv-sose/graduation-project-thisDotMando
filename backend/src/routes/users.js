@@ -9,6 +9,12 @@ router.get('/', async function (req, res, next) {
   res.send(await User.find())
 })
 
+router.get('/:id', async function (req, res, next) {
+  const user = await User.findById(req.params.id)
+  if (!user) return res.status(404).send('The user with the given ID was not found.')
+  res.send(user)
+})
+
 /* Create a new User */
 
 router.post('/', async function (req, res, next) {

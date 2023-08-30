@@ -5,16 +5,16 @@ export default {
   components: {},
   data() {
     return {
-      users: []
+      user: {}
     }
   },
   async mounted() {
-    this.users = await this.getUsers()
+    this.user = await this.getUser()
   },
 
   methods: {
-    async getUsers() {
-      return (await axios.get('http://localhost:3000/users')).data
+    async getUser() {
+      return (await axios.get(`http://localhost:3000/users/${this.$route.params.id}`)).data
     }
   }
 }
@@ -22,10 +22,5 @@ export default {
 
 <template>
   <h1>Userdatail Page</h1>
-  <div v-for="user in users" :key="user._id">
-    <div v-if="user._id === $route.params.id">
-      <h2>{{ user.name }}</h2>
-      <h3>{{ user.email }}</h3>
-    </div>
-  </div>
+  <h2>{{ user.name }}</h2>
 </template>
