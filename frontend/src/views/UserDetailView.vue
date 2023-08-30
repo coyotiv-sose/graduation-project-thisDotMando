@@ -14,7 +14,7 @@ export default {
 
   methods: {
     async getUsers() {
-      return (await axios.get('http://localhost:3000/users/')).data
+      return (await axios.get('http://localhost:3000/users')).data
     }
   }
 }
@@ -22,14 +22,10 @@ export default {
 
 <template>
   <h1>Userdatail Page</h1>
-  <div v-if="users">
-    <p>Email: {{ users.email }}</p>
-    <p>Age: {{ users.age }}</p>
+  <div v-for="user in users" :key="user._id">
+    <div v-if="user._id === $route.params.id">
+      <h2>{{ user.name }}</h2>
+      <h3>{{ user.email }}</h3>
+    </div>
   </div>
-
-  <div v-else>
-    <p>Loading user details...</p>
-  </div>
-  <p>{{ this.users.email }}</p>
-  <p>{{ this.users.age }}</p>
 </template>
