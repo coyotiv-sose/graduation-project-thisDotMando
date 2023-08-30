@@ -10,6 +10,12 @@ router.get('/', async function (req, res, next) {
   res.send(await Video.find())
 })
 
+router.get('/:id', async function (req, res, next) {
+  const video = await Video.findById(req.params.id)
+  if (!video) return res.status(404).send('The video with the given ID was not found.')
+  res.send(video)
+})
+
 /* Create a new Video */
 router.post('/', async function (req, res, next) {
   const user = await User.findById(req.body.user)

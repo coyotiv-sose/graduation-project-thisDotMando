@@ -16,6 +16,9 @@ var cors = require('cors')
 
 var app = express()
 
+// uncomment this line while implementing the authentication
+// app.set('trust proxy', 1)
+
 // CORS
 app.use(
   cors({
