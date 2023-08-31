@@ -1,6 +1,9 @@
 <script>
 import axios from 'axios'
+import { mapActions } from 'pinia'
 import { RouterLink } from 'vue-router'
+import { useVideoStore } from '../stores/video'
+
 export default {
   name: 'VideosView',
   components: {},
@@ -10,13 +13,11 @@ export default {
     }
   },
   async mounted() {
-    this.videos = await this.getVideos()
+    this.videos = await this.fetchVideos()
   },
 
   methods: {
-    async getVideos() {
-      return (await axios.get('http://localhost:3000/videos')).data
-    }
+    ...mapActions(useVideoStore, ['fetchVideos'])
   }
 }
 </script>

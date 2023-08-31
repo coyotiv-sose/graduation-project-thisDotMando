@@ -3,6 +3,7 @@
     "pug": "^3.0.2"
   },
   "devDependencies": {
+    "pinia": "^2.1.6",
     "pug-plain-loader": "^1.1.0"
   }
 }
