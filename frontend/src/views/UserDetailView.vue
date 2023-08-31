@@ -26,3 +26,4 @@ export default {
   <h3><span>Email: </span> {{ user.email }}</h3>
   <h4><span>Age: </span> {{ user.age }}</h4>
 </template>
+<!-- Test-->
