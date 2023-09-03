@@ -12,6 +12,6 @@ export default {
   <TheHeader />
   <RouterView />
   <div style="width: 100%">
-    <img src="@/assets/movie_play.jpg" alt="Dein Bild" style="width: 100%; height: auto" />
+    <img src="@/assets/WTJ.jpg" alt="Dein Bild" style="width: 100%; height: auto" />
   </div>
 </template>

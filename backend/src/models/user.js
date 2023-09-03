@@ -2,9 +2,10 @@ const Video = require('./video')
 const Channel = require('./channel')
 const mongoose = require('mongoose')
 const VideoList = require('./videoList')
+const passportLocalMongoose = require('passport-local-mongoose')
+
 const userSchema = new mongoose.Schema({
   name: String,
-  email: String,
   age: Number,
   channels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel', autopopulate: true }],
   mySubscribtions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Channel', autopopulate: true }],
@@ -12,6 +13,7 @@ const userSchema = new mongoose.Schema({
   videoLists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'VideoList', autopopulate: true }],
 })
 
+userSchema.plugin(passportLocalMongoose, { usernameField: 'email' })
 class User {
   //create video method
   async createVideo(title, description) {

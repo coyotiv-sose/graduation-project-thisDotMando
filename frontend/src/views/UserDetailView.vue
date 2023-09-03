@@ -25,6 +25,5 @@ export default {
   <h1>Userdatail Page</h1>
   <h2></h2>
   <h3><span>Username: </span> {{ user.name }}</h3>
-  <h4><span>Email: </span> {{ user.email }}</h4>
   <h5><span>Age: </span> {{ user.age }}</h5>
 </template>

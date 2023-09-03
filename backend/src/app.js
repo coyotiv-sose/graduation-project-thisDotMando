@@ -3,6 +3,7 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
+
 require('dotenv').config()
 require('./database-connection')
 console.log(process.env.MONGODB_CONNECTION_STRING)
@@ -12,12 +13,24 @@ var usersRouter = require('./routes/users')
 var videosRouter = require('./routes/videos')
 var channelsRouter = require('./routes/channels')
 var videoListsRouter = require('./routes/videoLists')
+var accountsRouter = require('./routes/accounts')
+
 var cors = require('cors')
+var session = require('express-session')
+var MongoStore = require('connect-mongo')
+var mongoose = require('mongoose')
+
+var User = require('./models/user')
+var passport = require('passport')
+//var LocalStrategy = require('passport-local').Strategy
+
+passport.use(User.createStrategy())
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
 var app = express()
 
-// uncomment this line while implementing the authentication
-// app.set('trust proxy', 1)
+app.set('trust proxy', 1)
 
 // CORS
 app.use(
@@ -37,11 +50,33 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
+const connectionPromise = mongoose.connection.asPromise().then(connection => (connection = connection.getClient()))
+
+app.use(
+  session({
+    secret: 'asdje2iowqj45doiqw!@7#',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    },
+    store: MongoStore.create({
+      clientPromise: connectionPromise,
+      stringify: false,
+    }),
+  })
+)
+
+app.use(passport.session())
+app.use(passport.initialize())
+
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/videos', videosRouter)
 app.use('/channels', channelsRouter)
 app.use('/videoLists', videoListsRouter)
+app.use('/accounts', accountsRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404))

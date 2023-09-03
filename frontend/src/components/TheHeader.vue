@@ -5,6 +5,9 @@
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/users">Users</RouterLink>
         <RouterLink to="/videos">Videos</RouterLink>
+        <RouterLink to="/login">Login</RouterLink>
+        <RouterLink to="/signup">Signup</RouterLink>
+        <RouterLink to="/logout">Logout</RouterLink>
       </nav>
     </div>
   </header>

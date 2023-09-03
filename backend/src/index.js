@@ -17,21 +17,27 @@ async function main() {
   const mitch = await axios.post('/users', {
     name: 'Mitch',
     email: 'mitch@web.de',
+    password: '123456!',
     age: 36,
   })
 
-  const peter = await axios.post('/users', {
+  const loggedInMitch = await axios.post('/accounts/session', {
+    email: 'mitch@web.de',
+    password: '123456!',
+  })
+
+  console.log('Mitch', loggedInMitch.data)
+
+  /*  const peter = await axios.post('/users', {
     name: 'Peter',
-    email: 'peter@web.de',
     age: 19,
   })
 
   const john = await axios.post('/users', {
     name: 'John',
-    email: 'john@web.de',
     age: 17,
   })
-
+ */
   //create a video with axios
   const mitchsVideo = await axios.post('/videos', {
     title: 'ICEage',
