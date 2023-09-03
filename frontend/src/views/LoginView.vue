@@ -1,9 +1,11 @@
 <script>
+import { mapActions } from 'pinia'
+import { useAccountStore } from '../stores/account'
 import axios from 'axios'
 
 export default {
   name: 'LoginView',
-  components: {},
+
   data() {
     return {
       email: '',
@@ -11,26 +13,25 @@ export default {
     }
   },
   methods: {
-    async login() {
-      axios.post('http://localhost:3000/accounts/session', {
-        email: this.email,
-        password: this.password
-      })
+    ...mapActions(useAccountStore, ['login']),
+    async doLogin() {
+      await this.login(this.email, this.password)
+      this.$router.push('/')
     }
   }
 }
 </script>
 
 <template>
-  <h1>Login to meTube</h1>
-  <form @submit.prevent="login">
+  <h1>Please Log in</h1>
+  <form @submit.prevent="doLogin">
     <div>
       <label for="email">Email</label>
       <input type="email" id="email" v-model="email" />
     </div>
     <div>
       <label for="password">Password</label>
-      <input type="password" id="password" v-model="Password" />
+      <input type="password" id="password" v-model="password" />
     </div>
     <button type="submit">Login</button>
   </form>

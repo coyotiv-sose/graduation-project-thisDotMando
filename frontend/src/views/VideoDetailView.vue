@@ -22,6 +22,7 @@ export default {
 
 <template>
   <h1>Video Detail Page</h1>
+
   <h2><span>Title: </span>{{ video.title }}</h2>
   <h3><span>Description: </span>{{ video.description }}</h3>
   <h4><span>Likes: </span>{{ video.likes }}</h4>
