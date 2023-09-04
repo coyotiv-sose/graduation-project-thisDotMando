@@ -32,7 +32,7 @@ export default {
         <RouterLink to="/videos">Videos</RouterLink>
         <RouterLink v-if="!user" to="/login">Login</RouterLink>
         <RouterLink v-if="!user" to="/signup">Signup</RouterLink>
-        <a v-if="user" @click="logout">Logout</a>
+        <a v-if="user" @click="logout">Log out</a>
       </nav>
     </div>
   </header>

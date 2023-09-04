@@ -24,14 +24,15 @@ export default {
 
 <template>
   <h1>Please Log in</h1>
+
   <form @submit.prevent="doLogin">
     <div>
       <label for="email">Email</label>
-      <input type="email" id="email" v-model="email" />
+      <input type="email" id="email" v-model="email" :type="text" required />
     </div>
     <div>
       <label for="password">Password</label>
-      <input type="password" id="password" v-model="password" />
+      <input type="password" id="password" v-model="password" :type="password" required />
     </div>
     <button type="submit">Login</button>
   </form>
