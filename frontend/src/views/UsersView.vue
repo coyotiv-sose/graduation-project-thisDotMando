@@ -1,5 +1,7 @@
 <script>
 import axios from 'axios'
+import { mapActions } from 'pinia'
+import { useUserStore } from '../stores/user'
 import { RouterLink } from 'vue-router'
 export default {
   name: 'UsersView',
@@ -10,13 +12,11 @@ export default {
     }
   },
   async mounted() {
-    this.users = await this.getUsers()
+    this.users = await this.fetchUsers()
   },
 
   methods: {
-    async getUsers() {
-      return (await axios.get('http://localhost:3000/users')).data
-    }
+    ...mapActions(useUserStore, ['fetchUsers'])
   }
 }
 </script>
