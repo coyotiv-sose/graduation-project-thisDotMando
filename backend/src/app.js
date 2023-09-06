@@ -3,6 +3,7 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
+var helmet = require('helmet')
 
 require('dotenv').config()
 require('./database-connection')
@@ -31,6 +32,7 @@ passport.deserializeUser(User.deserializeUser())
 var app = express()
 
 app.set('trust proxy', 1)
+app.use(helmet())
 
 // CORS
 app.use(
