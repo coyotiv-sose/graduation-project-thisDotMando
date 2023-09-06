@@ -9,6 +9,15 @@ export const useUserStore = defineStore('userStore', {
     },
     async fetchUser(id) {
       return (await axios.get(`/users/${id}`)).data
+    },
+    async signup(email, username, password) {
+      return (
+        await axios.post('/users', {
+          email: email,
+          username: username,
+          password: password
+        })
+      ).data
     }
   }
 })
