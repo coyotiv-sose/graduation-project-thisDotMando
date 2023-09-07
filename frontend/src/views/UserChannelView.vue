@@ -1,0 +1,58 @@
+<script>
+import axios from 'axios'
+import { mapActions, mapState } from 'pinia'
+import { useUserStore } from '../stores/user'
+import { RouterLink } from 'vue-router'
+import { useAccountStore } from '../stores/account'
+import { useChannelStore } from '../stores/channel'
+export default {
+  name: 'UserChannelView',
+  components: {},
+  data() {
+    return {
+      channels: [],
+      name: '',
+      isCreateChannelFormActive: false
+    }
+  },
+  async mounted() {
+    this.channels = await this.fetchUserChannels(this.user._id)
+  },
+
+  computed: {
+    ...mapState(useAccountStore, ['user'])
+  },
+
+  methods: {
+    ...mapActions(useUserStore, ['fetchUserChannels']),
+    ...mapActions(useChannelStore, ['createChannel']),
+    async doCreateChannel() {
+      await this.createChannel(this.name)
+      this.channels = await this.fetchUserChannels(this.user._id)
+    },
+    changeCreateChannelFormActive() {
+      this.isCreateChannelFormActive = !this.isCreateChannelFormActive
+    }
+  }
+}
+</script>
+
+<template>
+  <div>
+    <h1>Channel Page</h1>
+    <form v-show="isCreateChannelFormActive" @submit.prevent="doCreateChannel">
+      <div>
+        <label for="name">Channel Name:</label>
+        <input v-model="name" type="text" required />
+      </div>
+      <button type="submit">Create Channel:</button>
+    </form>
+    <button v-show="!isCreateChannelFormActive" @click="changeCreateChannelFormActive">
+      Create Channel
+    </button>
+    <div v-for="channel in channels">
+      {{ channel.name }}
+    </div>
+    <h3><span>Channelname: </span></h3>
+  </div>
+</template>

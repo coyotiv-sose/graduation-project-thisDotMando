@@ -2,7 +2,6 @@ var express = require('express')
 const User = require('../models/user')
 const Video = require('../models/video')
 const VideoList = require('../models/videoList')
-const { celebrate, Joi, errors, Segments } = require('celebrate')
 var router = express.Router()
 
 /* GET users listing. */
@@ -18,23 +17,13 @@ router.get('/:id', async function (req, res, next) {
 
 /* Create a new User */
 
-router.post(
-  '/',
-  celebrate({
-    [Segments.BODY]: Joi.object().keys({
-      name: Joi.string().required(),
-      email: Joi.string().email(),
-      password: Joi.string(),
-    }),
-  }),
-  async function (req, res, next) {
-    const { name, email, password } = req.body
+router.post('/', async function (req, res, next) {
+  const { name, email, password } = req.body
 
-    const user = await User.register({ name, email }, password)
+  const user = await User.register({ name, email }, password)
 
-    res.send(user)
-  }
-)
+  res.send(user)
+})
 
 //add video to videolist
 router.post('/:id/videoLists/:videoListsId/videos', async function (req, res, next) {
@@ -44,5 +33,12 @@ router.post('/:id/videoLists/:videoListsId/videos', async function (req, res, ne
   const updatedVideoList = await user.addVideoToVideoList(video, videoList)
   res.send(updatedVideoList)
 })
+
+router.get('/:id/channels', async function (req, res, next) {
+  const user = await User.findById(req.params.id)
+  const channels = user.channels
+  res.send(channels)
+})
+
 
 module.exports = router

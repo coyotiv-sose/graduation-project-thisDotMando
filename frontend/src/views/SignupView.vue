@@ -8,14 +8,14 @@ export default {
   data() {
     return {
       email: '',
-      username: '',
+      name: '',
       password: ''
     }
   },
   methods: {
     ...mapActions(useUserStore, ['signup']),
     async doSignup() {
-      await this.signup(this.email, this.username, this.password)
+      await this.signup(this.email, this.name, this.password)
       this.$router.push('/login')
     }
   }
@@ -31,8 +31,8 @@ export default {
         <input v-model="email" type="email" required />
       </div>
       <div>
-        <label for="username">Username:</label>
-        <input v-model="username" type="text" required />
+        <label for="name">Username:</label>
+        <input v-model="name" type="text" required />
       </div>
       <div>
         <label for="password">Password:</label>

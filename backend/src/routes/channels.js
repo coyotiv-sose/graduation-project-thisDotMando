@@ -5,8 +5,8 @@ var router = express.Router()
 
 /* Create a channel */
 router.post('/', async function (req, res, next) {
-  const user = await User.findById(req.body.user)
-  const channel = await user.createChannel(req.body.name)
+  //const user = await User.findById(req.user)
+  const channel = await req.user.createChannel(req.body.name)
   res.send(channel)
 })
 

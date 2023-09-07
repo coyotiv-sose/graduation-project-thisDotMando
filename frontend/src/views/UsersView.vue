@@ -24,7 +24,7 @@ export default {
 <template>
   <main>
     <h1>Here are all users</h1>
-    <div v-for="user in users">
+    <div v-for="user in users" :key="user._id">
       <RouterLink :to="`/users/${user._id}`">{{ user.name }}</RouterLink>
     </div>
   </main>

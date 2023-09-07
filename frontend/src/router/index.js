@@ -22,11 +22,11 @@ const router = createRouter({
       name: 'signup',
       component: SignupView
     },
-    /*  {
-      path: '/logout',
-      name: 'logout',
-      component: () => import('../views/LogoutView.vue')
-    }, */
+    {
+      path: '/channels',
+      name: 'channels',
+      component: () => import('../views/UserChannelView.vue')
+    },
     {
       path: '/users',
       name: 'users',

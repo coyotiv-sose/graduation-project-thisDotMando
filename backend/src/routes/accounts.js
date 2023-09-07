@@ -1,8 +1,10 @@
 const express = require('express')
+const User = require('../models/user')
+const app = require('../app')
 const passport = require('passport')
+
 const router = express.Router()
 
-// Ihre Routen hier ...
 router.get('/session', async function (req, res, next) {
   res.send(req.user)
 })
