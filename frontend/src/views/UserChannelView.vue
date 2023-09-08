@@ -39,7 +39,7 @@ export default {
 
 <template>
   <div>
-    <h1>Channel Page</h1>
+    <h1>Channel editor page</h1>
     <form v-show="isCreateChannelFormActive" @submit.prevent="doCreateChannel">
       <div>
         <label for="name">Channel Name:</label>
@@ -48,11 +48,15 @@ export default {
       <button type="submit">Create Channel:</button>
     </form>
     <button v-show="!isCreateChannelFormActive" @click="changeCreateChannelFormActive">
-      Create Channel
+      Create a new Channel
     </button>
-    <div v-for="channel in channels">
-      {{ channel.name }}
+    <div v-for="channel in channels" :key="channel._id">
+      <h2>
+        Channelname:
+        <span>
+          <RouterLink :to="`/videos/`">{{ channel.name }}</RouterLink>
+        </span>
+      </h2>
     </div>
-    <h3><span>Channelname: </span></h3>
   </div>
 </template>
