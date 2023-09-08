@@ -48,7 +48,7 @@ export default {
 <template>
   <div>
     <form @submit.prevent="uploadFile">
-      <label for="mp4File">Wählen Sie eine MP4-Datei aus:</label>
+      <label for="mp4File">Choose an Mp4 file:</label>
       <input
         type="file"
         id="mp4File"
@@ -57,11 +57,11 @@ export default {
         @change="handleFileUpload"
       />
       <br />
-      <input type="submit" value="Hochladen" />
+      <input type="submit" value="Upload" />
     </form>
 
     <div v-if="selectedVideo">
-      <h2>Abgespielte MP4-Datei:</h2>
+      <h2>Mp4 played:</h2>
       <video controls>
         <source :src="selectedVideo" type="video/mp4" />
       </video>
