@@ -28,12 +28,12 @@ export default {
     <div class="wrapper">
       <nav class="navbar">
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/users">Users</RouterLink>
-        <RouterLink to="/videos">Videos</RouterLink>
+        <RouterLink v-if="user" to="/users">Users</RouterLink>
+        <RouterLink v-if="user" to="/videos">Videos</RouterLink>
+        <RouterLink v-if="user" to="/channels">Channels</RouterLink>
         <RouterLink v-if="!user" to="/login">Login</RouterLink>
         <RouterLink v-if="!user" to="/signup">Signup</RouterLink>
         <a v-if="user" @click="logout">Log out</a>
-        <RouterLink v-if="user" to="/channels">Channels</RouterLink>
       </nav>
     </div>
   </header>
