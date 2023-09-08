@@ -46,6 +46,10 @@ export const useAccountStore = defineStore('Account', {
         withCredentials: true
       })
       this.user = null
+    },
+
+    async fetchUserChannels(id) {
+      await axios.get('http://localhost:3000/users/${id}/channels')
     }
   }
 })

@@ -3,6 +3,7 @@ const Channel = require('./channel')
 const mongoose = require('mongoose')
 const VideoList = require('./videoList')
 const passportLocalMongoose = require('passport-local-mongoose')
+const autopopulate = require('mongoose-autopopulate')
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -87,6 +88,7 @@ class User {
     }
   }
 }
-/* userSchema.plugin(autopopulate) */
+userSchema.plugin(autopopulate)
+userSchema.plugin(passportLocalMongoose, { usernameField: 'email' })
 userSchema.loadClass(User)
 module.exports = mongoose.model('User', userSchema)

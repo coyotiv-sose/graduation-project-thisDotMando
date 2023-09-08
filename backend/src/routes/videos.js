@@ -17,11 +17,15 @@ router.get('/:id', async function (req, res, next) {
 })
 
 /* Create a new Video */
+
 router.post('/', async function (req, res, next) {
-  const user = await User.findById(req.body.user)
-  const video = await user.createVideo(req.body.title, req.body.description)
+  const { title, description, url, creator } = req.body
+
+  const video = await Video.create({ title, description, url, creator })
+
   res.send(video)
 })
+
 /*User like a video*/
 router.post('/:id/likes', async function (req, res, next) {
   const video = await Video.findById(req.params.id)

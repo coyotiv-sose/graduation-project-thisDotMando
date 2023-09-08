@@ -34,4 +34,11 @@ router.post('/:id/videoLists/:videoListsId/videos', async function (req, res, ne
   res.send(updatedVideoList)
 })
 
+router.get('/:id/channels', async function (req, res, next) {
+  const user = await User.findById(req.params.id)
+  const channels = user.channels
+  res.send(channels)
+})
+
+
 module.exports = router

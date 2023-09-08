@@ -9,7 +9,8 @@ export default {
   components: {},
   data() {
     return {
-      videos: []
+      videos: [],
+      selectedVideo: null
     }
   },
   async mounted() {
@@ -17,19 +18,65 @@ export default {
   },
 
   methods: {
+    handleFileUpload(event) {
+      const selectedFile = event.target.files[0]
+      if (selectedFile) {
+        // Konvertieren Sie die ausgewählte Datei in eine Data-URL
+        const reader = new FileReader()
+        reader.onload = () => {
+          this.selectedVideo = reader.result
+        }
+        reader.readAsDataURL(selectedFile)
+      }
+    },
+    uploadFile() {
+      // Erstellen Sie ein FormData-Objekt
+      const formData = new FormData()
+
+      // Fügen Sie der FormData-Instanz die ausgewählte Datei hinzu
+      formData.append('file', this.$refs.fileInput.files[0])
+
+      // Senden Sie die Datei mit axios an den Server
+      axios.post('http://localhost:3000/videos', formData).then((response) => {
+        console.log(response)
+      })
+    },
     ...mapActions(useVideoStore, ['fetchVideos'])
   }
 }
 </script>
-
 <template>
+  <div>
+    <form @submit.prevent="uploadFile">
+      <label for="mp4File">Choose an Mp4 file:</label>
+      <input
+        type="file"
+        id="mp4File"
+        ref="fileInput"
+        accept="video/mp4"
+        @change="handleFileUpload"
+      />
+      <br />
+      <input type="submit" value="Upload" />
+    </form>
+
+    <div v-if="selectedVideo">
+      <h2>Mp4 played:</h2>
+      <video controls>
+        <source :src="selectedVideo" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+</template>
+
+<!-- <template>
   <main>
     <h1>Here are all properties of the created videos</h1>
     <div v-for="video in videos">
       <RouterLink :to="`/videos/${video._id}`">{{ video.title }}</RouterLink>
     </div>
   </main>
-</template>
+</template> -->
 
 <style scoped>
 p {
