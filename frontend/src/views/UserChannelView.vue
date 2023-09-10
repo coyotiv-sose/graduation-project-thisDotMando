@@ -55,10 +55,12 @@ export default {
     </button>
     <div v-for="channel in channels" :key="channel._id">
       <h2>
-        Channelname:
-        <span>
-          <RouterLink :to="`/videos/`">{{ channel.name }}</RouterLink>
-        </span>
+        <li>
+          Channelname:
+          <span>
+            <RouterLink :to="`/videos/`">{{ channel.name }}</RouterLink>
+          </span>
+        </li>
       </h2>
     </div>
   </div>
