@@ -3,6 +3,7 @@ import axios from 'axios'
 import { mapActions } from 'pinia'
 import { RouterLink } from 'vue-router'
 import { useVideoStore } from '../stores/video'
+import { useAccountStore } from '../stores/account'
 
 export default {
   name: 'VideosView',
@@ -10,7 +11,9 @@ export default {
   data() {
     return {
       videos: [],
-      selectedVideo: null
+      selectedVideo: null,
+      title: '',
+      description: ''
     }
   },
   async mounted() {
@@ -21,30 +24,33 @@ export default {
     handleFileUpload(event) {
       const selectedFile = event.target.files[0]
       if (selectedFile) {
-        // Konvertieren Sie die ausgewählte Datei in eine Data-URL
         const reader = new FileReader()
-        reader.onload = () => {
-          this.selectedVideo = reader.result
-        }
-        reader.readAsDataURL(selectedFile)
+
+        return new Promise((resolve) => {
+          reader.onload = () => {
+            this.selectedVideo = reader.result
+            resolve()
+          }
+          reader.readAsDataURL(selectedFile)
+        })
       }
     },
-    uploadFile() {
-      // Erstellen Sie ein FormData-Objekt
+    async uploadFile() {
       const formData = new FormData()
-
-      // Fügen Sie der FormData-Instanz die ausgewählte Datei hinzu
       formData.append('file', this.$refs.fileInput.files[0])
 
-      // Senden Sie die Datei mit axios an den Server
-      axios.post('http://localhost:3000/videos', formData).then((response) => {
-        console.log(response)
-      })
+      formData.append('title', this.title)
+      formData.append('description', this.description)
+
+      const response = await axios.post('http://localhost:3000/videos', formData)
+
+      console.log(response)
     },
     ...mapActions(useVideoStore, ['fetchVideos'])
   }
 }
 </script>
+
 <template>
   <div>
     <form @submit.prevent="uploadFile">
@@ -57,6 +63,15 @@ export default {
         @change="handleFileUpload"
       />
       <br />
+
+      <!-- Benutzer kann Titel und Beschreibung eingeben -->
+      <label for="title">Title:</label>
+      <input type="text" id="title" v-model="title" />
+
+      <label for="description">Description:</label>
+      <input id="description" v-model="description" />
+      <br />
+
       <input type="submit" value="Upload" />
     </form>
 

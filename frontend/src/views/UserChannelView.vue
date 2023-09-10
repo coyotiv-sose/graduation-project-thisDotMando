@@ -5,6 +5,7 @@ import { useUserStore } from '../stores/user'
 import { RouterLink } from 'vue-router'
 import { useAccountStore } from '../stores/account'
 import { useChannelStore } from '../stores/channel'
+import { useVideoStore } from '../stores/video'
 export default {
   name: 'UserChannelView',
   components: {},
@@ -26,6 +27,8 @@ export default {
   methods: {
     ...mapActions(useUserStore, ['fetchUserChannels']),
     ...mapActions(useChannelStore, ['createChannel']),
+    ...mapActions(useVideoStore, ['fetchVideos']),
+
     async doCreateChannel() {
       await this.createChannel(this.name)
       this.channels = await this.fetchUserChannels(this.user._id)
