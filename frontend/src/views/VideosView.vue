@@ -1,50 +1,3 @@
-<script>
-import axios from 'axios'
-import { mapActions } from 'pinia'
-import { RouterLink } from 'vue-router'
-import { useVideoStore } from '../stores/video'
-
-export default {
-  name: 'VideosView',
-  components: {},
-  data() {
-    return {
-      videos: [],
-      selectedVideo: null
-    }
-  },
-  async mounted() {
-    this.videos = await this.fetchVideos()
-  },
-
-  methods: {
-    handleFileUpload(event) {
-      const selectedFile = event.target.files[0]
-      if (selectedFile) {
-        // Konvertieren Sie die ausgewählte Datei in eine Data-URL
-        const reader = new FileReader()
-        reader.onload = () => {
-          this.selectedVideo = reader.result
-        }
-        reader.readAsDataURL(selectedFile)
-      }
-    },
-    uploadFile() {
-      // Erstellen Sie ein FormData-Objekt
-      const formData = new FormData()
-
-      // Fügen Sie der FormData-Instanz die ausgewählte Datei hinzu
-      formData.append('file', this.$refs.fileInput.files[0])
-
-      // Senden Sie die Datei mit axios an den Server
-      axios.post('http://localhost:3000/videos', formData).then((response) => {
-        console.log(response)
-      })
-    },
-    ...mapActions(useVideoStore, ['fetchVideos'])
-  }
-}
-</script>
 <template>
   <div>
     <form @submit.prevent="uploadFile">
@@ -57,17 +10,85 @@ export default {
         @change="handleFileUpload"
       />
       <br />
-      <input type="submit" value="Upload" />
+
+      <!-- Benutzer kann Titel und Beschreibung eingeben -->
+      <label for="title">Title:</label>
+      <input type="text" id="title" v-model="title" />
+
+      <label for="description">Description:</label>
+      <input id="description" v-model="description" />
+      <br />
+
+      <button type="submit">Upload</button>
     </form>
 
-    <div v-if="selectedVideo">
-      <h2>Mp4 played:</h2>
+    <div v-for="video in videos" :key="video._id">
+      <h2>{{ video.title }}</h2>
+      <p>{{ video.description }}</p>
       <video controls>
-        <source :src="selectedVideo" type="video/mp4" />
+        <source :src="'http://localhost:3000/videos' + video.url" type="video/mp4" />
       </video>
     </div>
   </div>
 </template>
+
+<script>
+import axios from 'axios'
+import { mapActions } from 'pinia'
+import { useVideoStore } from '../stores/video'
+
+export default {
+  name: 'VideosView',
+  data() {
+    return {
+      videos: [],
+      title: '',
+      description: ''
+    }
+  },
+  async mounted() {
+    this.videos = await this.fetchVideos()
+  },
+
+  methods: {
+    handleFileUpload(event) {
+      const selectedFile = event.target.files[0]
+      if (selectedFile) {
+        const reader = new FileReader()
+
+        return new Promise((resolve) => {
+          reader.onload = () => {
+            this.selectedVideo = reader.result
+            resolve()
+          }
+          reader.readAsDataURL(selectedFile)
+        })
+      }
+    },
+    async uploadFile() {
+      const formData = new FormData()
+      formData.append('file', this.$refs.fileInput.files[0])
+
+      formData.append('title', this.title)
+      formData.append('description', this.description)
+
+      const response = await axios.post('http://localhost:3000/videos', formData)
+
+      console.log(response)
+    },
+    async fetchVideos() {
+      try {
+        const response = await axios.get('http://localhost:3000/videos')
+        return response.data
+      } catch (error) {
+        console.error('Fehler beim Abrufen der Videos:', error)
+        return []
+      }
+    },
+    ...mapActions(useVideoStore, ['fetchVideos'])
+  }
+}
+</script>
 
 <!-- <template>
   <main>
@@ -78,7 +99,7 @@ export default {
   </main>
 </template> -->
 
-<style scoped>
+<!-- <style scoped>
 p {
   color: red;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -99,4 +120,4 @@ h4 {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
     Verdana, sans-serif;
 }
-</style>
+</style> -->

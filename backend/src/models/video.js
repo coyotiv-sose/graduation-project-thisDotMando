@@ -7,6 +7,7 @@ const videoSchema = new mongoose.Schema({
   likes: { type: Number, default: 0 },
   views: Number,
   creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 } },
+  url: String,
 })
 class Video {}
 videoSchema.plugin(autopopulate)
