@@ -1,17 +1,47 @@
+<template>
+  <div>
+    <form @submit.prevent="uploadFile">
+      <label for="mp4File">Choose an Mp4 file:</label>
+      <input
+        type="file"
+        id="mp4File"
+        ref="fileInput"
+        accept="video/mp4"
+        @change="handleFileUpload"
+      />
+      <br />
+
+      <!-- Benutzer kann Titel und Beschreibung eingeben -->
+      <label for="title">Title:</label>
+      <input type="text" id="title" v-model="title" />
+
+      <label for="description">Description:</label>
+      <input id="description" v-model="description" />
+      <br />
+
+      <button type="submit">Upload</button>
+    </form>
+
+    <div v-for="video in videos" :key="video._id">
+      <h2>{{ video.title }}</h2>
+      <p>{{ video.description }}</p>
+      <video controls>
+        <source :src="'http://localhost:3000/videos' + video.url" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+</template>
+
 <script>
 import axios from 'axios'
 import { mapActions } from 'pinia'
-import { RouterLink } from 'vue-router'
 import { useVideoStore } from '../stores/video'
-import { useAccountStore } from '../stores/account'
 
 export default {
   name: 'VideosView',
-  components: {},
   data() {
     return {
       videos: [],
-      selectedVideo: null,
       title: '',
       description: ''
     }
@@ -46,43 +76,19 @@ export default {
 
       console.log(response)
     },
+    async fetchVideos() {
+      try {
+        const response = await axios.get('http://localhost:3000/videos')
+        return response.data
+      } catch (error) {
+        console.error('Fehler beim Abrufen der Videos:', error)
+        return []
+      }
+    },
     ...mapActions(useVideoStore, ['fetchVideos'])
   }
 }
 </script>
-
-<template>
-  <div>
-    <form @submit.prevent="uploadFile">
-      <label for="mp4File">Choose an Mp4 file:</label>
-      <input
-        type="file"
-        id="mp4File"
-        ref="fileInput"
-        accept="video/mp4"
-        @change="handleFileUpload"
-      />
-      <br />
-
-      <!-- Benutzer kann Titel und Beschreibung eingeben -->
-      <label for="title">Title:</label>
-      <input type="text" id="title" v-model="title" />
-
-      <label for="description">Description:</label>
-      <input id="description" v-model="description" />
-      <br />
-
-      <input type="submit" value="Upload" />
-    </form>
-
-    <div v-if="selectedVideo">
-      <h2>Mp4 played:</h2>
-      <video controls>
-        <source :src="selectedVideo" type="video/mp4" />
-      </video>
-    </div>
-  </div>
-</template>
 
 <!-- <template>
   <main>
@@ -93,7 +99,7 @@ export default {
   </main>
 </template> -->
 
-<style scoped>
+<!-- <style scoped>
 p {
   color: red;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -114,4 +120,4 @@ h4 {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
     Verdana, sans-serif;
 }
-</style>
+</style> -->
