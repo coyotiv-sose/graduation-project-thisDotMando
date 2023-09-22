@@ -48,16 +48,16 @@ router.post('/', upload.single('file'), async function (req, res, next) {
       return res.status(400).send('No files were uploaded.')
     }
 
-    // Erstellen Sie ein neues Video-Dokument in der Datenbank
+    // Erstellet ein neues Video-Dokument in der Datenbank
     const video = await Video.create({
       title,
       description,
       creator: user.id,
       url: `/videos/${user.id}/${req.file.filename}`,
-      // Speichern Sie den Dateipfad
+      // Speichert den Dateipfad
     })
 
-    // Fügen Sie das Video zur Benutzerliste hinzu
+    // Füget das Video zur Benutzerliste hinzu
     user.videos.push(video)
     await user.save()
 
@@ -68,63 +68,37 @@ router.post('/', upload.single('file'), async function (req, res, next) {
   }
 })
 
-/*
-router.get('/', async function (req, res, next) {
-  res.send(await Video.find())
-}) */
+// GET-Route zum Abrufen aller Videos
+router.get('/', async (req, res) => {
+  try {
+    // Hier kannst du die Videos aus deiner Datenbank abrufen, z. B. alle Videos
+    const videos = await Video.find()
 
-/* router.get('/:id', async function (req, res, next) {
-  const video = await Video.findById(req.params.id)
-  if (!video) return res.status(404).send('The video with the given ID was not found.')
-  res.send(video)
-}) */
+    // Du kannst auch Filter, Sortierung oder Paginierung hinzufügen, je nach deinen Anforderungen
 
-router.get('/:id', async function (req, res, next) {
-  const video = await Video.findById(req.params.id)
-  /* if (!video) {
-    return res.status(404).send('The video with the given ID was not found.')
-  } */
-  const videoPath = path.join(__dirname, `../public/videos/${video.url}`)
-  const videoStat = fs.statSync(videoPath)
-  const fileSize = videoStat.size
-  const range = req.headers.range
-
-  if (range) {
-    const parts = range.replace(/bytes=/, '').split('-')
-    const start = parseInt(parts[0], 10)
-    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1
-    const chunkSize = end - start + 1
-    const file = fs.createReadStream(videoPath, { start, end })
-    const head = {
-      'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-      'Accept-Ranges': 'bytes',
-      'Content-Length': chunkSize,
-      'Content-Type': 'video/mp4',
-    }
-    res.writeHead(206, head)
-    file.pipe(res)
-  } else {
-    const head = {
-      'Content-Length': fileSize,
-      'Content-Type': 'video/mp4',
-    }
-    res.writeHead(200, head)
-    fs.createReadStream(videoPath).pipe(res)
+    res.send(videos)
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Videos:', error)
+    res.status(500).send('Internal Server Error')
   }
 })
-/*
 
-router.post('/', async function (req, res, next) {
-  const { title, description } = req.body
-  const user = req.user
+// GET-Route zum Abrufen eines einzelnen Videos anhand seiner ID
+router.get('/:videoId/stream', async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.videoId)
 
+    if (!video) {
+      return res.status(404).json({ message: 'Video nicht gefunden' })
+    }
 
-  const video = await Video.create({ title, description, user: user._id })
-  user.videos.push(video)
-  await user.save()
-
-  res.send(video)
-}) */
+    const videoPath = path.join(__dirname, `../public${video.url}`)
+    res.sendFile(videoPath)
+  } catch (error) {
+    console.error('Fehler beim Abrufen des Videos:', error)
+    res.status(500).send('Internal Server Error')
+  }
+})
 
 /*User like a video*/
 router.post('/:id/likes', async function (req, res, next) {

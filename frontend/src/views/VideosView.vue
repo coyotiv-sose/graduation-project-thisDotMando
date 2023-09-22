@@ -25,9 +25,12 @@
     <div v-for="video in videos" :key="video._id">
       <h2>{{ video.title }}</h2>
       <p>{{ video.description }}</p>
-      <video controls>
-        <source :src="'http://localhost:3000/videos' + video.url" type="video/mp4" />
+      <video controls @click="playVideo(video)">
+        <source :src="video.url" type="video/mp4" />
       </video>
+      <!-- Hier wird der Link zur Video-Detailseite generiert -->
+      <router-link :to="`/videos/${video._id}`">Video ansehen</router-link>
+      <button @click="streamVideo(video)">Stream</button>
     </div>
   </div>
 </template>
@@ -36,6 +39,7 @@
 import axios from 'axios'
 import { mapActions } from 'pinia'
 import { useVideoStore } from '../stores/video'
+import { RouterLink } from 'vue-router'
 
 export default {
   name: 'VideosView',
@@ -49,13 +53,11 @@ export default {
   async mounted() {
     this.videos = await this.fetchVideos()
   },
-
   methods: {
     handleFileUpload(event) {
       const selectedFile = event.target.files[0]
       if (selectedFile) {
         const reader = new FileReader()
-
         return new Promise((resolve) => {
           reader.onload = () => {
             this.selectedVideo = reader.result
@@ -65,59 +67,45 @@ export default {
         })
       }
     },
+    getVideoUrl(video) {
+      return video.url // Hier könnte die Logik zur Zusammenstellung der URL sein, falls erforderlich.
+    },
+    playVideo(video) {
+      const videoUrl = this.getVideoUrl(video)
+      if (videoUrl) {
+        window.open(videoUrl, '_window')
+      }
+    },
     async uploadFile() {
       const formData = new FormData()
       formData.append('file', this.$refs.fileInput.files[0])
-
       formData.append('title', this.title)
       formData.append('description', this.description)
-
       const response = await axios.post('http://localhost:3000/videos', formData)
-
       console.log(response)
     },
     async fetchVideos() {
       try {
-        const response = await axios.get('http://localhost:3000/videos')
+        const response = await axios.get('http://localhost:3000/videos', { withCredentials: true })
         return response.data
       } catch (error) {
         console.error('Fehler beim Abrufen der Videos:', error)
         return []
       }
     },
-    ...mapActions(useVideoStore, ['fetchVideos'])
-  }
+    async streamVideo(video) {
+      const response = await axios.get(`http://localhost:3000/videos/${video._id}/stream`, {
+        responseType: 'blob'
+      })
+      const videoBlob = new Blob([response.data], { type: 'video/mp4' })
+      const url = window.URL.createObjectURL(videoBlob)
+      window.open(url)
+    },
+    getVideoUrl(video) {
+      return video.url // Hier könnte die Logik zur Zusammenstellung der URL sein, falls erforderlich.
+    },
+    ...mapActions(useVideoStore, ['fetchVideos'], ['streamVideo'])
+  },
+  components: { RouterLink }
 }
 </script>
-
-<!-- <template>
-  <main>
-    <h1>Here are all properties of the created videos</h1>
-    <div v-for="video in videos">
-      <RouterLink :to="`/videos/${video._id}`">{{ video.title }}</RouterLink>
-    </div>
-  </main>
-</template> -->
-
-<!-- <style scoped>
-p {
-  color: red;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-h3 {
-  color: blue;
-  font-style: italic;
-  font-size: x-large;
-}
-h2 {
-  color: rgb(178, 245, 178);
-  font-style: oblique;
-  font-size: xx-large;
-}
-h4 {
-  color: rgb(124, 56, 119);
-  font-style: oblique;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
-    Verdana, sans-serif;
-}
-</style> -->
