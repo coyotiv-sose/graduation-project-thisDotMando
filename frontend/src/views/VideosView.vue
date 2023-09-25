@@ -28,8 +28,6 @@
       <video controls @click="playVideo(video)">
         <source :src="video.url" type="video/mp4" />
       </video>
-      <!-- Hier wird der Link zur Video-Detailseite generiert -->
-      <router-link :to="`/videos/${video._id}`">Video ansehen</router-link>
       <button @click="streamVideo(video)">Stream</button>
     </div>
   </div>
