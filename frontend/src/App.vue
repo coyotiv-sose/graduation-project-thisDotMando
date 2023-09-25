@@ -13,7 +13,11 @@ export default {
     await this.fetchUser()
   },
   methods: {
-    ...mapActions(useAccountStore, ['fetchUser', 'logout'])
+    ...mapActions(useAccountStore, ['fetchUser', 'logout']),
+    async DoLogout() {
+      await this.logout()
+      this.$router.push('/login')
+    }
   },
   computed: {
     ...mapState(useAccountStore, ['user'])
@@ -33,7 +37,7 @@ export default {
         <RouterLink v-if="user" to="/channels">Channels</RouterLink>
         <RouterLink v-if="!user" to="/login">Login</RouterLink>
         <RouterLink v-if="!user" to="/signup">Signup</RouterLink>
-        <a v-if="user" @click="logout">Log out</a>
+        <a v-if="user" @click="DoLogout">Log out</a>
       </nav>
     </div>
   </header>
@@ -92,6 +96,7 @@ nav a.router-link-exact-active:hover {
 }
 
 nav a {
+  cursor: pointer;
   display: inline-block;
   padding: 0 1rem;
   border-left: 1px solid var(--color-border);

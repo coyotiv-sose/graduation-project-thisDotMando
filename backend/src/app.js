@@ -37,10 +37,18 @@ app.use(helmet())
 // CORS
 app.use(
   cors({
-    origin: true,
+    origin: 'http://localhost:5173',
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   })
 )
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:5173') // Stelle sicher, dass dies auf die richtige Domäne verweist
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.header('Access-Control-Allow-Credentials', true)
+  next()
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
