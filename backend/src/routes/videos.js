@@ -47,17 +47,13 @@ router.post('/', upload.single('file'), async function (req, res, next) {
     if (!req.file) {
       return res.status(400).send('No files were uploaded.')
     }
-
-    // Erstellet ein neues Video-Dokument in der Datenbank
     const video = await Video.create({
       title,
       description,
       creator: user.id,
       url: `/videos/${user.id}/${req.file.filename}`,
-      // Speichert den Dateipfad
     })
 
-    // Füget das Video zur Benutzerliste hinzu
     user.videos.push(video)
     await user.save()
 
@@ -71,11 +67,7 @@ router.post('/', upload.single('file'), async function (req, res, next) {
 // GET-Route zum Abrufen aller Videos
 router.get('/', async (req, res) => {
   try {
-    // Hier kannst du die Videos aus deiner Datenbank abrufen, z. B. alle Videos
     const videos = await Video.find()
-
-    // Du kannst auch Filter, Sortierung oder Paginierung hinzufügen, je nach deinen Anforderungen
-
     res.send(videos)
   } catch (error) {
     console.error('Fehler beim Abrufen der Videos:', error)
@@ -101,19 +93,36 @@ router.get('/:videoId/stream', async (req, res) => {
 })
 
 /*User like a video*/
-router.post('/:id/likes', async function (req, res, next) {
-  const video = await Video.findById(req.params.id)
-  const user = await User.findById(req.body.user)
 
-  if (user.name === video.creator) {
-    res.send('You can not like your own video')
+router.post('/:id/likes', async (req, res, next) => {
+  try {
+    const video = await Video.findById(req.params.id)
+    console.log(req.user.id)
+    const user = await User.findById(req.user.id)
+
+    if (!user) {
+      return res.status(404).send('User not found')
+    }
+    if (user.id === video.creator) {
+      return res.status(400).send('You can not like your own video')
+    }
+    if (video.likedBy.some(person => person.id === user.id)) {
+      return res.status(400).send('You already liked this video')
+    }
+
+    await user.likeVideo(video)
+    if (typeof video.likes !== 'number') {
+      video.likes = 0
+    }
+    video.likes++
+    await video.save()
+    res.send(video)
+  } catch (error) {
+    console.error('Fehler beim Liken des Videos:', error)
+    next(error)
   }
-  if (video.likedBy.some(person => person.id === user.id)) {
-    return next({ status: 404, message: 'You already liked this video' })
-  }
-  await user.likeVideo(video)
-  res.send(video)
 })
+
 /* peter dislike mitchs video */
 router.patch('/:id/likes', async function (req, res, next) {
   const video = await Video.findById(req.params.id)

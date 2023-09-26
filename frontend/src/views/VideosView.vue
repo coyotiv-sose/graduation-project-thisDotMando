@@ -1,35 +1,15 @@
 <template>
-  <div>
-    <form @submit.prevent="uploadFile">
-      <label for="mp4File">Choose an Mp4 file:</label>
-      <input
-        type="file"
-        id="mp4File"
-        ref="fileInput"
-        accept="video/mp4"
-        @change="handleFileUpload"
-      />
-      <br />
-
-      <!-- Benutzer kann Titel und Beschreibung eingeben -->
-      <label for="title">Title:</label>
-      <input type="text" id="title" v-model="title" />
-
-      <label for="description">Description:</label>
-      <input id="description" v-model="description" />
-      <br />
-
-      <button type="submit">Upload</button>
-    </form>
-
-    <div v-for="video in videos" :key="video._id">
-      <h2>{{ video.title }}</h2>
-      <p>{{ video.description }}</p>
-      <video controls @click="playVideo(video)">
-        <source :src="video.url" type="video/mp4" />
-      </video>
-      <button @click="streamVideo(video)">Stream</button>
-    </div>
+  <h1>Here are all uploaded Videos</h1>
+  <div v-for="video in videos" :key="video._id">
+    <h2>{{ video.title }}</h2>
+    <p>{{ video.description }}</p>
+    <video controls>
+      <source :src="getVideoUrl(video)" type="video/mp4" />
+    </video>
+    <button @click="streamVideo(video)">Stream</button>
+    <button @click="likeVideo(video)">Like</button>
+    <span>{{ video.likes }}</span>
+    <!-- Anzeige der Anzahl der Likes -->
   </div>
 </template>
 
@@ -37,6 +17,7 @@
 import axios from 'axios'
 import { mapActions } from 'pinia'
 import { useVideoStore } from '../stores/video'
+import { useAccountStore } from '../stores/account'
 import { RouterLink } from 'vue-router'
 
 export default {
@@ -45,7 +26,8 @@ export default {
     return {
       videos: [],
       title: '',
-      description: ''
+      description: '',
+      user: []
     }
   },
   async mounted() {
@@ -91,6 +73,7 @@ export default {
         return []
       }
     },
+
     async streamVideo(video) {
       const response = await axios.get(`http://localhost:3000/videos/${video._id}/stream`, {
         responseType: 'blob'
@@ -100,10 +83,25 @@ export default {
       window.open(url)
     },
     getVideoUrl(video) {
-      return video.url // Hier könnte die Logik zur Zusammenstellung der URL sein, falls erforderlich.
+      return video.url
     },
-    ...mapActions(useVideoStore, ['fetchVideos'], ['streamVideo'])
+    ...mapActions(useVideoStore, ['fetchVideos'], ['streamVideo'], ['likeVideo']),
+    ...mapActions(useAccountStore, ['fetchUser']),
+
+    async likeVideo(video) {
+      const requestData = {
+        videoId: video._id, // Stellen Sie sicher, dass dies zur erwarteten Datenstruktur passt
+        userId: this.user._id
+      }
+      const response = await axios.post(
+        `http://localhost:3000/videos/${video._id}/likes`,
+        requestData,
+        { withCredentials: true }
+      )
+      console.log(response)
+    }
   },
+
   components: { RouterLink }
 }
 </script>

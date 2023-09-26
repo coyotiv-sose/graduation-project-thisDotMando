@@ -31,5 +31,16 @@ export const useVideoStore = defineStore('videoStore', {
         throw error
       }
     }
+  },
+
+  //User can like a video
+  async likeVideo(videoId, userId) {
+    try {
+      const response = await axios.post(`/videos/${videoId}/likes`, { user: userId })
+      return response.data
+    } catch (error) {
+      console.error('Fehler beim Liken des Videos:', error)
+      throw error
+    }
   }
 })

@@ -38,11 +38,24 @@ class User {
   }
 
   async likeVideo(video) {
-    video.likes += 1
-    video.likedBy.push(this)
-    await video.save()
-    return video
+    try {
+      if (video.creator.equals(this.id)) {
+        throw new Error('You cannot like your own video')
+      }
+
+      if (!video.likedBy.some(person => person.equals(this._id))) {
+        video.likedBy.push(this)
+        await video.save()
+        return video
+      } else {
+        throw new Error('You already liked this video')
+      }
+    } catch (error) {
+      console.error('Fehler beim Liken des Videos:', error)
+      throw error
+    }
   }
+
   //peter dislike mitchs video
 
   async dislikeVideo(video) {
