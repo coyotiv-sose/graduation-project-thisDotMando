@@ -2,13 +2,7 @@
   <div>
     <form @submit.prevent="uploadFile">
       <label for="mp4File">Choose an Mp4 file:</label>
-      <input
-        type="file"
-        id="mp4File"
-        ref="fileInput"
-        accept="video/mp4"
-        @change="handleFileUpload"
-      />
+      <input type="file" id="mp4File" ref="mp4File" accept="video/mp4" @change="handleFileUpload" />
       <br />
 
       <!-- Benutzer kann Titel und Beschreibung eingeben -->
@@ -34,7 +28,8 @@ export default {
     return {
       videos: [],
       title: '',
-      description: ''
+      description: '',
+      selectedVideo: null
     }
   },
 
@@ -54,7 +49,7 @@ export default {
     },
     async uploadFile() {
       const formData = new FormData()
-      formData.append('file', this.$refs.fileInput.files[0])
+      formData.append('file', this.$refs.mp4File.files[0])
       formData.append('title', this.title)
       formData.append('description', this.description)
       const response = await axios.post('/videos', formData)
