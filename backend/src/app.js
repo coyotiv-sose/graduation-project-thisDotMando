@@ -37,6 +37,11 @@ app.use(helmet())
 
 app.use(morgan('combined'))
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://frontend3-emdybvxr6q-ew.a.run.app')
+  next()
+})
+
 /* // CORS
 const allowedOrigins = [
   'https://frontend3-emdybvxr6q-ew.a.run.app',
@@ -59,6 +64,14 @@ const corsOptions = {
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }
+
+const corsOptions = {
+  origin: 'https://frontend-emdybvxr6q-ew.a.run.app', // Hier sollte die URL deines Frontends stehen
+  credentials: true, // Erlaube Cookies und Authentifizierung
+};
+
+app.use(cors(corsOptions));
+
 app.use(cors(corsOptions))
  */
 /* app.use((req, res, next) => {
