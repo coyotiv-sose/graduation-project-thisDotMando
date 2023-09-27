@@ -26,7 +26,8 @@
 
 <script>
 import axios from 'axios'
-
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
+axios.defaults.withCredentials = true
 export default {
   name: 'VideoUploader',
   data() {
@@ -56,7 +57,7 @@ export default {
       formData.append('file', this.$refs.fileInput.files[0])
       formData.append('title', this.title)
       formData.append('description', this.description)
-      const response = await axios.post('http://localhost:3000/videos', formData)
+      const response = await axios.post('/videos', formData)
       console.log(response)
     }
   }

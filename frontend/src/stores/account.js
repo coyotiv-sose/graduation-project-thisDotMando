@@ -1,6 +1,10 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { ref, computed } from 'vue'
+
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
+axios.defaults.withCredentials = true
+
 export const useAccountStore = defineStore('Account', {
   state: () => ({
     user: null
@@ -8,7 +12,7 @@ export const useAccountStore = defineStore('Account', {
   actions: {
     async fetchUser() {
       this.user = (
-        await axios.get('http://localhost:3000/accounts/session', {
+        await axios.get('/accounts/session', {
           withCredentials: true
         })
       ).data
@@ -16,7 +20,7 @@ export const useAccountStore = defineStore('Account', {
     async login(email, password) {
       this.user = (
         await axios.post(
-          'http://localhost:3000/accounts/session',
+          '/accounts/session',
           {
             email: email,
             password: password
@@ -29,7 +33,7 @@ export const useAccountStore = defineStore('Account', {
     },
     async signup(email, username, password) {
       this.user = await axios.post(
-        'http://localhost:3000/accounts/session',
+        '/accounts/session',
         {
           email: email,
           username: username,
@@ -42,14 +46,14 @@ export const useAccountStore = defineStore('Account', {
     },
 
     async logout() {
-      await axios.delete('http://localhost:3000/accounts/session', {
+      await axios.delete('/accounts/session', {
         withCredentials: true
       })
       this.user = null
     },
 
     async fetchUserChannels(id) {
-      await axios.get('http://localhost:3000/users/${id}/channels')
+      await axios.get('/users/${id}/channels')
     }
   }
 })

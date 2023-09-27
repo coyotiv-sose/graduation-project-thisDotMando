@@ -6,8 +6,9 @@
     <video controls>
       <source :src="getVideoUrl(video)" type="video/mp4" />
     </video>
-    <button @click="streamVideo(video)">Stream</button>
-    <button @click="likeVideo(video)">Like</button>
+    <button @click="handleStreamVideo(video)">Stream</button>
+
+    <button @click="likeVideo(video._id)">Like</button>
     <span>{{ video.likes }}</span>
     <!-- Anzeige der Anzahl der Likes -->
   </div>
@@ -17,7 +18,6 @@
 import axios from 'axios'
 import { mapActions } from 'pinia'
 import { useVideoStore } from '../stores/video'
-import { useAccountStore } from '../stores/account'
 import { RouterLink } from 'vue-router'
 
 export default {
@@ -27,13 +27,15 @@ export default {
       videos: [],
       title: '',
       description: '',
-      user: []
+      user: {}
     }
   },
   async mounted() {
     this.videos = await this.fetchVideos()
   },
   methods: {
+    ...mapActions(useVideoStore, ['fetchVideos', 'streamVideo', 'likeVideo']),
+
     handleFileUpload(event) {
       const selectedFile = event.target.files[0]
       if (selectedFile) {
@@ -56,15 +58,16 @@ export default {
         window.open(videoUrl, '_window')
       }
     },
-    async uploadFile() {
+    /*  async uploadFile() {
       const formData = new FormData()
       formData.append('file', this.$refs.fileInput.files[0])
       formData.append('title', this.title)
       formData.append('description', this.description)
+      // make use of the uploadVideo action from the store
       const response = await axios.post('http://localhost:3000/videos', formData)
       console.log(response)
-    },
-    async fetchVideos() {
+    }, */
+    /*  async fetchVideos() {
       try {
         const response = await axios.get('http://localhost:3000/videos', { withCredentials: true })
         return response.data
@@ -72,34 +75,35 @@ export default {
         console.error('Fehler beim Abrufen der Videos:', error)
         return []
       }
-    },
+    }, */
 
-    async streamVideo(video) {
-      const response = await axios.get(`http://localhost:3000/videos/${video._id}/stream`, {
-        responseType: 'blob'
-      })
-      const videoBlob = new Blob([response.data], { type: 'video/mp4' })
+    async handleStreamVideo(video) {
+      // const response = await axios.get(`http://localhost:3000/videos/${video._id}/stream`, {
+      // responseType: 'blob'
+      // })
+      const response = await this.streamVideo(video._id)
+      // const videoBlob = new Blob([response.data], { type: 'video/mp4' })
+      const videoBlob = new Blob([response], { type: 'video/mp4' })
+
       const url = window.URL.createObjectURL(videoBlob)
       window.open(url)
     },
     getVideoUrl(video) {
       return video.url
-    },
-    ...mapActions(useVideoStore, ['fetchVideos'], ['streamVideo'], ['likeVideo']),
-    ...mapActions(useAccountStore, ['fetchUser']),
-
-    async likeVideo(video) {
-      const requestData = {
-        videoId: video._id, // Stellen Sie sicher, dass dies zur erwarteten Datenstruktur passt
-        userId: this.user._id
-      }
-      const response = await axios.post(
-        `http://localhost:3000/videos/${video._id}/likes`,
-        requestData,
-        { withCredentials: true }
-      )
-      console.log(response)
     }
+
+    /* async likeVideo(video) {
+    const requestData = {
+      videoId: video._id, // Stellen Sie sicher, dass dies zur erwarteten Datenstruktur passt
+      userId: this.user._id
+    }
+    const response = await axios.post(
+      `http://localhost:3000/videos/${video._id}/likes`,
+      requestData,
+      { withCredentials: true }
+    )
+    console.log(response)
+  } */
   },
 
   components: { RouterLink }

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 axios.defaults.baseURL = import.meta.env.VITE_API_URL
+axios.defaults.withCredentials = true
 
 export const useVideoStore = defineStore('videoStore', {
   actions: {
@@ -24,23 +25,24 @@ export const useVideoStore = defineStore('videoStore', {
     },
     async streamVideo(id) {
       try {
-        const response = await axios.get(`/videos/${id}/stream`)
+        const response = await axios.get(`/videos/${id}/stream`, {
+          responseType: 'blob'
+        })
         return response.data
       } catch (error) {
         console.error('Fehler beim Streamen des Videos:', error)
         throw error
       }
-    }
-  },
-
-  //User can like a video
-  async likeVideo(videoId, userId) {
-    try {
-      const response = await axios.post(`/videos/${videoId}/likes`, { user: userId })
-      return response.data
-    } catch (error) {
-      console.error('Fehler beim Liken des Videos:', error)
-      throw error
+    },
+    //User can like a video
+    async likeVideo(videoId) {
+      try {
+        const response = await axios.post(`/videos/${videoId}/likes`)
+        return response.data
+      } catch (error) {
+        console.error('Fehler beim Liken des Videos:', error)
+        throw error
+      }
     }
   }
 })
