@@ -4,6 +4,7 @@ var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 var helmet = require('helmet')
+var morgan = require('morgan')
 
 require('dotenv').config()
 require('./database-connection')
@@ -34,21 +35,52 @@ var app = express()
 app.set('trust proxy', 1)
 app.use(helmet())
 
-// CORS
-app.use(
-  cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  })
-)
+app.use(morgan('combined'))
+
+/* // CORS
+const allowedOrigins = [
+  'https://frontend3-emdybvxr6q-ew.a.run.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://backend1-emdybvxr6q-ew.a.run.app/',
+]
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Überprüfe, ob der Ursprung der Anfrage in der Liste der erlaubten Ursprünge ist
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      // Wenn ja, erlaube diesen Ursprung
+      callback(null, true)
+    } else {
+      // Wenn nicht, lehne die Anfrage ab
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}
+app.use(cors(corsOptions))
+ */
+/* app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://frontend3-emdybvxr6q-ew.a.run.app')
+  next()
+})
+
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173') // Stelle sicher, dass dies auf die richtige Domäne verweist
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
   res.header('Access-Control-Allow-Credentials', true)
   next()
-})
+}) */
+
+app.use(
+  cors({
+    // enables requests from any domain, not safe, further add only the domain you want
+    origin: true,
+    // allows cookies
+    credentials: true,
+  })
+)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -70,6 +102,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     },
     store: MongoStore.create({
       clientPromise: connectionPromise,
@@ -95,11 +128,9 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
+  console.error(err.stack)
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
-
-  // render the error page
   res.status(err.status || 500)
   res.render('error')
 })
