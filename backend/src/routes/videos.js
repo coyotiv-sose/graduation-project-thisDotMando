@@ -97,7 +97,7 @@ router.get('/:videoId/stream', async (req, res) => {
 router.post('/:id/likes', async (req, res, next) => {
   try {
     const video = await Video.findById(req.params.id)
-    console.log(req.user.id)
+
     const user = await User.findById(req.user.id)
 
     if (!user) {
