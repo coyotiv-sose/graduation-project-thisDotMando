@@ -13,6 +13,7 @@ var router = express.Router()
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
     try {
+      console.log('req.user.id', req.user.id)
       const user = await User.findById(req.user.id)
       if (!user) {
         throw new Error('User not found')
