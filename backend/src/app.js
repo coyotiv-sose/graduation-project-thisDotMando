@@ -38,14 +38,24 @@ app.use(helmet())
 app.use(morgan('combined'))
 
 // Konfigurieren Sie CORS, um die Herkunfts-URL aus dem Anfrage-Header zu verwenden
+const allowedOrigins = [
+  'https://frontend1mitch-emdybvxr6q-ew.a.run.app', // Cloud Run-URL
+  'http://localhost:3000', // Lokale Entwicklung
+]
+
 const corsOptions = {
-  origin: true, // Verwenden Sie die Herkunfts-URL aus dem Anfrage-Header
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true,
   methods: ['GET', 'PUT', 'POST', 'DELETE'],
   optionsSuccessStatus: 204,
 }
 
-// Verwenden Sie CORS in Ihrer Express-Anwendung
 app.use(cors(corsOptions))
 
 /* app.use((req, res, next) => {
