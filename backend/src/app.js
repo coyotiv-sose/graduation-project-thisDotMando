@@ -37,10 +37,35 @@ app.use(helmet())
 
 app.use(morgan('combined'))
 
-app.use((req, res, next) => {
+//Herkunfts-URL für lokale Entwicklung und Cloud Run fest
+const localOrigin = 'http://localhost:3000' // Die URL für lokale Entwicklungsumgebung
+const cloudRunOrigin = 'https://frontend1mitch-emdybvxr6q-ew.a.run.app' // Die URL zur Cloud-Run-Anwendung
+
+// Erstellen Sie eine Funktion zur dynamischen Auswahl der Herkunfts-URL
+function selectOrigin() {
+  // Überprüfen Sie, ob die Anwendung in der Cloud Run-Umgebung ausgeführt wird
+  if (process.env.NODE_ENV === 'production') {
+    return cloudRunOrigin
+  } else {
+    return localOrigin
+  }
+}
+
+// Konfigurieren Sie CORS mit der ausgewählten Herkunfts-URL
+const corsOptions = {
+  origin: selectOrigin(), // Dynamische Auswahl der Herkunfts-URL
+  credentials: true,
+  methods: ['GET', 'PUT', 'POST', 'DELETE'],
+  optionsSuccessStatus: 204,
+}
+
+// Verwenden Sie CORS in Ihrer Express-Anwendung
+app.use(cors(corsOptions))
+
+/* app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'https://frontend3-emdybvxr6q-ew.a.run.app')
   next()
-})
+}) */
 
 /* // CORS
 const allowedOrigins = [
@@ -86,14 +111,14 @@ app.use((req, res, next) => {
   next()
 }) */
 
-app.use(
+/* app.use(
   cors({
     // enables requests from any domain, not safe, further add only the domain you want
     origin: true,
     // allows cookies
     credentials: true,
   })
-)
+) */
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
