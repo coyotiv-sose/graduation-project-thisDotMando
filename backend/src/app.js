@@ -37,23 +37,9 @@ app.use(helmet())
 
 app.use(morgan('combined'))
 
-//Herkunfts-URL für lokale Entwicklung und Cloud Run fest
-const localOrigin = 'http://localhost:3000' // Die URL für lokale Entwicklungsumgebung
-const cloudRunOrigin = 'https://frontend1mitch-emdybvxr6q-ew.a.run.app' // Die URL zur Cloud-Run-Anwendung
-
-// Erstellen Sie eine Funktion zur dynamischen Auswahl der Herkunfts-URL
-function selectOrigin() {
-  // Überprüfen Sie, ob die Anwendung in der Cloud Run-Umgebung ausgeführt wird
-  if (process.env.NODE_ENV === 'production') {
-    return cloudRunOrigin
-  } else {
-    return localOrigin
-  }
-}
-
-// Konfigurieren Sie CORS mit der ausgewählten Herkunfts-URL
+// Konfigurieren Sie CORS, um die Herkunfts-URL aus dem Anfrage-Header zu verwenden
 const corsOptions = {
-  origin: selectOrigin(), // Dynamische Auswahl der Herkunfts-URL
+  origin: true, // Verwenden Sie die Herkunfts-URL aus dem Anfrage-Header
   credentials: true,
   methods: ['GET', 'PUT', 'POST', 'DELETE'],
   optionsSuccessStatus: 204,
