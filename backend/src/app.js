@@ -38,7 +38,7 @@ app.use(helmet())
 app.use(morgan('combined'))
 
 // Konfigurieren Sie CORS, um die Herkunfts-URL aus dem Anfrage-Header zu verwenden
-const allowedOrigins = [
+/* const allowedOrigins = [
   'https://frontend1mitch-emdybvxr6q-ew.a.run.app', // Cloud Run-URL
   'http://localhost:3000', // Lokale Entwicklung
 ]
@@ -56,7 +56,7 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 }
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions)) */
 
 /* app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'https://frontend3-emdybvxr6q-ew.a.run.app')
@@ -107,14 +107,14 @@ app.use((req, res, next) => {
   next()
 }) */
 
-/* app.use(
+app.use(
   cors({
     // enables requests from any domain, not safe, further add only the domain you want
     origin: true,
     // allows cookies
     credentials: true,
   })
-) */
+)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
