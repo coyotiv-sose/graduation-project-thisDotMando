@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     ...mapActions(useAccountStore, ['fetchUser', 'logout']),
-    async DoLogout() {
+    async doLogout() {
       await this.logout()
       this.$router.push('/login')
     }
@@ -37,7 +37,7 @@ export default {
         <RouterLink v-if="user" to="/channels">Channels</RouterLink>
         <RouterLink v-if="!user" to="/login">Login</RouterLink>
         <RouterLink v-if="!user" to="/signup">Signup</RouterLink>
-        <a v-if="user" @click="DoLogout">Log out</a>
+        <a v-if="user" @click="doLogout">Log out</a>
       </nav>
     </div>
   </header>
