@@ -126,9 +126,15 @@ router.post('/:id/likes', async (req, res, next) => {
 /* peter dislike mitchs video */
 router.patch('/:id/likes', async function (req, res, next) {
   const video = await Video.findById(req.params.id)
-  const user = await User.findById(req.body.user)
+  const user = await User.findById(req.user.id)
+  if (user.id === video.creator) {
+    return res.status(400).send('You can not dislike your own video')
+  }
+
   if (video.likedBy.some(person => person.id === user.id)) {
     await user.dislikeVideo(video)
+    video.likes--
+    await video.save()
     res.send(video)
   } else {
     res.send('You have not liked this video yet')

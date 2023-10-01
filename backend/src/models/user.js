@@ -61,7 +61,6 @@ class User {
   async dislikeVideo(video) {
     if (video.likedBy.some(person => person.id === this.id)) {
       video.likedBy.pull(this)
-      video.likes -= 1
       await video.save()
       return video
     } else {
