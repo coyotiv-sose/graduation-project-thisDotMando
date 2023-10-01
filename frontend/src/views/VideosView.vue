@@ -10,7 +10,6 @@
 
     <button @click="likeVideo(video._id)">Like</button>
     <span>{{ video.likes }}</span>
-    <!-- Anzeige der Anzahl der Likes -->
   </div>
 </template>
 
@@ -34,7 +33,7 @@ export default {
     this.videos = await this.fetchVideos()
   },
   methods: {
-    ...mapActions(useVideoStore, ['fetchVideos', 'streamVideo', 'likeVideo']),
+    ...mapActions(useVideoStore, ['fetchVideos', 'streamVideo']),
 
     handleFileUpload(event) {
       const selectedFile = event.target.files[0]
@@ -50,7 +49,7 @@ export default {
       }
     },
     getVideoUrl(video) {
-      return video.url // Hier könnte die Logik zur Zusammenstellung der URL sein, falls erforderlich.
+      return video.url
     },
     playVideo(video) {
       const videoUrl = this.getVideoUrl(video)
@@ -58,31 +57,9 @@ export default {
         window.open(videoUrl, '_window')
       }
     },
-    /*  async uploadFile() {
-      const formData = new FormData()
-      formData.append('file', this.$refs.fileInput.files[0])
-      formData.append('title', this.title)
-      formData.append('description', this.description)
-      // make use of the uploadVideo action from the store
-      const response = await axios.post('http://localhost:3000/videos', formData)
-      console.log(response)
-    }, */
-    /*  async fetchVideos() {
-      try {
-        const response = await axios.get('http://localhost:3000/videos', { withCredentials: true })
-        return response.data
-      } catch (error) {
-        console.error('Fehler beim Abrufen der Videos:', error)
-        return []
-      }
-    }, */
 
     async handleStreamVideo(video) {
-      // const response = await axios.get(`http://localhost:3000/videos/${video._id}/stream`, {
-      // responseType: 'blob'
-      // })
       const response = await this.streamVideo(video._id)
-      // const videoBlob = new Blob([response.data], { type: 'video/mp4' })
       const videoBlob = new Blob([response], { type: 'video/mp4' })
 
       const url = window.URL.createObjectURL(videoBlob)
@@ -90,6 +67,22 @@ export default {
     },
     getVideoUrl(video) {
       return video.url
+    },
+
+    async likeVideo(videoId) {
+      try {
+        const response = await axios.post(`/videos/${videoId}/likes`)
+        const likedVideo = response.data
+
+        const index = this.videos.findIndex((video) => video._id === likedVideo._id)
+        if (index !== -1) {
+          this.videos[index].likes = likedVideo.likes
+        }
+        return likedVideo
+      } catch (error) {
+        console.error('Fehler beim Liken des Videos:', error)
+        throw error
+      }
     }
 
     /* async likeVideo(video) {
