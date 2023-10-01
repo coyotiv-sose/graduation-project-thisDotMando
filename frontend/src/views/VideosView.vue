@@ -9,7 +9,10 @@
     <button @click="handleStreamVideo(video)">Stream</button>
 
     <button @click="likeVideo(video._id)">Like</button>
-    <span>{{ video.likes }}</span>
+    <button @click="dislikeVideo(video._id)">Dislike</button>
+    <h3>
+      Likes: <span>{{ video.likes }}</span>
+    </h3>
   </div>
 </template>
 
@@ -83,20 +86,23 @@ export default {
         console.error('Fehler beim Liken des Videos:', error)
         throw error
       }
-    }
+    },
 
-    /* async likeVideo(video) {
-    const requestData = {
-      videoId: video._id, // Stellen Sie sicher, dass dies zur erwarteten Datenstruktur passt
-      userId: this.user._id
+    async dislikeVideo(videoId) {
+      try {
+        const response = await axios.patch(`/videos/${videoId}/likes`)
+        const dislikedVideo = response.data
+
+        const index = this.videos.findIndex((video) => video._id === dislikedVideo._id)
+        if (index !== -1) {
+          this.videos[index].likes = dislikedVideo.likes
+        }
+        return dislikedVideo
+      } catch (error) {
+        console.error('Fehler beim Disliken des Videos:', error)
+        throw error
+      }
     }
-    const response = await axios.post(
-      `http://localhost:3000/videos/${video._id}/likes`,
-      requestData,
-      { withCredentials: true }
-    )
-    console.log(response)
-  } */
   },
 
   components: { RouterLink }
