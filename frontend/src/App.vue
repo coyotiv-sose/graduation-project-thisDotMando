@@ -1,13 +1,41 @@
+<template>
+  <div id="app">
+    <header>
+      <div class="wrapper">
+        <nav class="navbar">
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink v-if="user" to="/users">Users</RouterLink>
+          <RouterLink v-if="user" to="/videos">Videos</RouterLink>
+          <RouterLink v-if="user" to="/channels">Channels</RouterLink>
+          <RouterLink v-if="!user" to="/login">Login</RouterLink>
+          <RouterLink v-if="!user" to="/signup">Signup</RouterLink>
+          <a v-if="user" @click="doLogout">Log out</a>
+          <div v-if="loading" class="loader-wrapper">
+            <Loader />
+          </div>
+        </nav>
+      </div>
+    </header>
+    <Loader :loading="loading" :progress="progress" />
+    <h1>Welcome to meTube {{ user?.name }}</h1>
+
+    <RouterView />
+    <div style="width: 100%">
+      <img src="@/assets/WTJ.jpg" alt="Dein Bild" style="width: 100%; height: auto" />
+    </div>
+  </div>
+</template>
+
 <script>
 import { RouterLink, RouterView } from 'vue-router'
-import TheHeader from './components/TheHeader.vue'
 import axios from 'axios'
 import { mapActions, mapState } from 'pinia'
 import { useAccountStore } from './stores/account'
+import Loader from './components/Loader.vue'
 
 export default {
   name: 'App',
-  components: { RouterLink, RouterView /* TheHeader */ },
+  components: { RouterLink, RouterView, Loader },
 
   async mounted() {
     await this.fetchUser()
@@ -20,35 +48,24 @@ export default {
     }
   },
   computed: {
-    ...mapState(useAccountStore, ['user'])
+    ...mapState(useAccountStore, ['user', 'loading', 'progress'])
   }
 }
 </script>
 
-<template>
-  <!-- <TheHeader /> -->
-
-  <header>
-    <div class="wrapper">
-      <nav class="navbar">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink v-if="user" to="/users">Users</RouterLink>
-        <RouterLink v-if="user" to="/videos">Videos</RouterLink>
-        <RouterLink v-if="user" to="/channels">Channels</RouterLink>
-        <RouterLink v-if="!user" to="/login">Login</RouterLink>
-        <RouterLink v-if="!user" to="/signup">Signup</RouterLink>
-        <a v-if="user" @click="doLogout">Log out</a>
-      </nav>
-    </div>
-  </header>
-  <h1>Welcome to meTube {{ user?.name }}</h1>
-
-  <RouterView />
-  <div style="width: 100%">
-    <img src="@/assets/WTJ.jpg" alt="Dein Bild" style="width: 100%; height: auto" />
-  </div>
-</template>
 <style scoped>
+.loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /*   */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Stelle sicher, dass der Loader über allem liegt */
+}
 h1 {
   color: rgb(124, 56, 119);
   font-style: oblique;
