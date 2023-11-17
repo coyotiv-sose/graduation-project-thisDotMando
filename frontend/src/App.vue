@@ -17,7 +17,6 @@
       </div>
     </header>
     <Loader :loading="loading" :progress="progress" />
-    <h1>Welcome to meTube {{ user?.name }}</h1>
 
     <RouterView />
     <div style="width: 100%">
