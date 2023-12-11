@@ -23,7 +23,8 @@
     "nodemon": "^2.0.19",
     "pinia": "^2.1.6",
     "prettier": "^2.7.1",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "supertest": "^6.3.3"
   },
   "main": "index.js",
   "dependencies": {
@@ -209,4 +210,5 @@
     "backend"
   ],
   "author": "Michel Kowal, 'Mitch'"
+
 }
